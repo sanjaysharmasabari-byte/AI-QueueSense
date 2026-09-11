@@ -1,3 +1,11 @@
+/**
+ * AI QueueSense - Queue Intelligence & Prediction Engine
+ * 
+ * NOTE: All "AI" and "Computer Vision" behavior in this module is simulated/mocked
+ * using deterministic mathematical formulas and randomized interval perturbations for prototype
+ * demonstration purposes. It is not connected to a live ML inference pipeline.
+ */
+
 import { CongestionLevel, LocationItem, AIPredictionDetail, ThresholdSettings } from './types';
 
 export function calculateCongestionLevel(

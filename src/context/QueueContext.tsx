@@ -1,3 +1,11 @@
+/**
+ * AI QueueSense - Global Context Provider & Live Simulation Engine
+ * 
+ * NOTE: Contains the in-memory state management and ~3.5s randomized interval simulation
+ * that perturbs location counts, updates camera feeds, and fires surge alerts.
+ * All computer vision and AI forecasts are simulated for prototype demonstration.
+ */
+
 'use client';
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
