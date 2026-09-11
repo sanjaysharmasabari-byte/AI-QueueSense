@@ -16,7 +16,7 @@ export default function CameraPage() {
   const activeCamera = cameras.find((c) => c.id === activeCamId) || cameras[0];
 
   return (
-    <div className="flex h-screen overflow-hidden bg-[#070A11]">
+    <div className="flex h-screen overflow-hidden bg-slate-50 dark:bg-[#070A11]">
       <div className="hidden md:block">
         <Sidebar
           collapsed={sidebarCollapsed}
@@ -31,19 +31,19 @@ export default function CameraPage() {
           {/* Header */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-              <p className="text-xs font-bold uppercase tracking-wider text-teal-400">
+              <p className="text-xs font-bold uppercase tracking-wider text-teal-600 dark:text-teal-400">
                 Optical Intelligence Layer
               </p>
-              <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+              <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
                 Camera Stream Monitoring
               </h1>
-              <p className="text-xs text-slate-400 mt-1">
+              <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">
                 Real-time YOLO object detection frame sampler for campus queue counters.
               </p>
             </div>
 
-            <div className="flex items-center gap-2 text-xs bg-slate-900 border border-white/10 px-3 py-1.5 rounded-lg text-slate-300">
-              <Cpu className="w-4 h-4 text-teal-400" />
+            <div className="flex items-center gap-2 text-xs bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-white/10 px-3 py-1.5 rounded-lg text-slate-700 dark:text-slate-300">
+              <Cpu className="w-4 h-4 text-teal-600 dark:text-teal-400" />
               <span>YOLOv8 Core Active • FPS 4.8</span>
             </div>
           </div>

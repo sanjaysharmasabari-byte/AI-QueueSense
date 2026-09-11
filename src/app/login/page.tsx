@@ -30,7 +30,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#070A11] flex items-center justify-center p-4 relative overflow-hidden bg-hero-gradient">
+    <div className="min-h-screen bg-slate-50 dark:bg-[#070A11] flex items-center justify-center p-4 relative overflow-hidden">
       {/* Background glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-teal-500/10 rounded-full blur-[100px] pointer-events-none" />
 
@@ -39,16 +39,16 @@ export default function LoginPage() {
         <div className="text-center space-y-2">
           <Link href="/" className="inline-flex items-center gap-3 group">
             <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-teal-500 to-cyan-400 p-[1px] shadow-lg shadow-teal-500/20">
-              <div className="w-full h-full bg-slate-950 rounded-[11px] flex items-center justify-center">
-                <Scan className="w-5 h-5 text-teal-400" />
+              <div className="w-full h-full bg-slate-100 dark:bg-slate-950 rounded-[11px] flex items-center justify-center">
+                <Scan className="w-5 h-5 text-teal-600 dark:text-teal-400" />
               </div>
             </div>
-            <span className="font-extrabold text-xl text-white tracking-tight">
+            <span className="font-extrabold text-xl text-slate-900 dark:text-white tracking-tight">
               AI QueueSense
             </span>
           </Link>
-          <h2 className="text-xl font-bold text-slate-200">Sign in to your account</h2>
-          <p className="text-xs text-slate-400">
+          <h2 className="text-xl font-bold text-slate-800 dark:text-slate-200">Sign in to your account</h2>
+          <p className="text-xs text-slate-600 dark:text-slate-400">
             Real-time campus queue intelligence platform
           </p>
         </div>

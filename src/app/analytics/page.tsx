@@ -26,7 +26,7 @@ export default function AnalyticsPage() {
   );
 
   return (
-    <div className="flex h-screen overflow-hidden bg-[#070A11]">
+    <div className="flex h-screen overflow-hidden bg-slate-50 dark:bg-[#070A11]">
       <div className="hidden md:block">
         <Sidebar
           collapsed={sidebarCollapsed}
@@ -41,20 +41,20 @@ export default function AnalyticsPage() {
           {/* Header */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-              <p className="text-xs font-bold uppercase tracking-wider text-teal-400">
+              <p className="text-xs font-bold uppercase tracking-wider text-teal-600 dark:text-teal-400">
                 Historical Intelligence & Trends
               </p>
-              <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+              <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
                 Queue Analytics Center
               </h1>
-              <p className="text-xs text-slate-400 mt-1">
+              <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">
                 Data-driven reports, hourly congestion volume, and multi-location benchmarks.
               </p>
             </div>
 
             {/* Time Filter Tabs (Section 16 requirement) */}
             <div className="flex items-center gap-2">
-              <div className="flex items-center bg-slate-900 border border-white/10 p-1 rounded-xl text-xs">
+              <div className="flex items-center bg-slate-200/80 dark:bg-slate-900 border border-slate-300 dark:border-white/10 p-1 rounded-xl text-xs">
                 {(['1H', '6H', '24H', '7D', '30D'] as const).map((range) => (
                   <button
                     key={range}
@@ -62,7 +62,7 @@ export default function AnalyticsPage() {
                     className={`px-3 py-1 rounded-lg font-semibold transition-all ${
                       timeRange === range
                         ? 'bg-teal-500 text-slate-950 shadow'
-                        : 'text-slate-400 hover:text-slate-200'
+                        : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
                     }`}
                   >
                     {range}

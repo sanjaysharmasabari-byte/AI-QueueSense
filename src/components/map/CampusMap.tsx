@@ -19,33 +19,33 @@ export const CampusMap: React.FC<CampusMapProps> = ({ locations }) => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
         <div>
           <div className="flex items-center gap-2">
-            <MapPin className="w-5 h-5 text-teal-400" />
-            <h3 className="font-bold text-base text-white">Interactive Campus Crowd Map</h3>
+            <MapPin className="w-5 h-5 text-teal-600 dark:text-teal-400" />
+            <h3 className="font-bold text-base text-slate-900 dark:text-white">Interactive Campus Crowd Map</h3>
           </div>
-          <p className="text-xs text-slate-400 mt-0.5">
+          <p className="text-xs text-slate-600 dark:text-slate-400 mt-0.5">
             Click any campus queue node to inspect real-time density and wait estimates.
           </p>
         </div>
 
         {/* Legend */}
-        <div className="flex items-center gap-3 text-xs bg-slate-950/80 px-3 py-1.5 rounded-lg border border-white/10">
+        <div className="flex items-center gap-3 text-xs bg-slate-100 dark:bg-slate-950/80 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-white/10">
           <div className="flex items-center gap-1.5">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-400" />
-            <span className="text-slate-300">Low</span>
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
+            <span className="text-slate-700 dark:text-slate-300 font-medium">Low</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <span className="w-2.5 h-2.5 rounded-full bg-amber-400" />
-            <span className="text-slate-300">Medium</span>
+            <span className="w-2.5 h-2.5 rounded-full bg-amber-500" />
+            <span className="text-slate-700 dark:text-slate-300 font-medium">Medium</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <span className="w-2.5 h-2.5 rounded-full bg-rose-400" />
-            <span className="text-slate-300">High</span>
+            <span className="w-2.5 h-2.5 rounded-full bg-rose-500" />
+            <span className="text-slate-700 dark:text-slate-300 font-medium">High</span>
           </div>
         </div>
       </div>
 
       {/* Campus Map Graphic Area */}
-      <div className="relative w-full aspect-[16/9] min-h-[360px] bg-slate-950 rounded-xl border border-white/10 overflow-hidden shadow-inner p-4">
+      <div className="relative w-full aspect-[16/9] min-h-[360px] bg-slate-900 dark:bg-slate-950 rounded-xl border border-slate-300 dark:border-white/10 overflow-hidden shadow-inner p-4">
         {/* Grid & Pathway graphic background */}
         <svg className="absolute inset-0 w-full h-full opacity-20 pointer-events-none" xmlns="http://www.w3.org/2000/svg">
           <defs>
@@ -89,13 +89,13 @@ export const CampusMap: React.FC<CampusMapProps> = ({ locations }) => {
 
               {/* Pin Pill Button */}
               <div
-                className={`relative flex items-center gap-1.5 px-3 py-1.5 rounded-full border bg-slate-950 backdrop-blur-md transition-all duration-300 transform group-hover:scale-110 ${
+                className={`relative flex items-center gap-1.5 px-3 py-1.5 rounded-full border bg-slate-900/90 dark:bg-slate-950 backdrop-blur-md transition-all duration-300 transform group-hover:scale-110 ${
                   isSelected ? 'ring-2 ring-teal-400 scale-110 border-teal-400' : 'border-white/20'
                 }`}
               >
                 <span className={`w-2.5 h-2.5 rounded-full ${pinColor}`} />
                 <span className="font-bold text-xs text-white tracking-wide">{loc.name}</span>
-                <span className="text-[10px] text-slate-400 font-mono">({loc.peopleCount})</span>
+                <span className="text-[10px] text-slate-300 dark:text-slate-400 font-mono">({loc.peopleCount})</span>
               </div>
             </div>
           );
@@ -104,37 +104,37 @@ export const CampusMap: React.FC<CampusMapProps> = ({ locations }) => {
 
       {/* Selected Location Drawer Popup */}
       {selectedLocation && (
-        <div className="mt-4 p-4 rounded-xl bg-slate-900 border border-teal-500/40 animate-fade-in">
+        <div className="mt-4 p-4 rounded-xl bg-slate-100 dark:bg-slate-900 border border-teal-500/40 animate-fade-in">
           <div className="flex items-start justify-between">
             <div className="flex items-center gap-2">
               <QueueStatusBadge status={selectedLocation.status} />
-              <h4 className="font-bold text-base text-white">{selectedLocation.name}</h4>
-              <span className="text-xs text-slate-400">({selectedLocation.category})</span>
+              <h4 className="font-bold text-base text-slate-900 dark:text-white">{selectedLocation.name}</h4>
+              <span className="text-xs text-slate-500 dark:text-slate-400">({selectedLocation.category})</span>
             </div>
             <button
               onClick={() => setSelectedLocation(null)}
-              className="text-slate-400 hover:text-white p-1"
+              className="text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white p-1"
             >
               <X className="w-4 h-4" />
             </button>
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 my-3">
-            <div className="p-2.5 rounded-lg bg-slate-950 border border-white/5">
-              <p className="text-[10px] text-slate-400 uppercase">People Count</p>
-              <p className="text-sm font-bold text-white">{selectedLocation.peopleCount}</p>
+            <div className="p-2.5 rounded-lg bg-white dark:bg-slate-950 border border-slate-200 dark:border-white/5">
+              <p className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-semibold">People Count</p>
+              <p className="text-sm font-bold text-slate-900 dark:text-white">{selectedLocation.peopleCount}</p>
             </div>
-            <div className="p-2.5 rounded-lg bg-slate-950 border border-white/5">
-              <p className="text-[10px] text-slate-400 uppercase">Est. Wait</p>
-              <p className="text-sm font-bold text-teal-300">{selectedLocation.estimatedWaitMin} min</p>
+            <div className="p-2.5 rounded-lg bg-white dark:bg-slate-950 border border-slate-200 dark:border-white/5">
+              <p className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-semibold">Est. Wait</p>
+              <p className="text-sm font-bold text-teal-600 dark:text-teal-300">{selectedLocation.estimatedWaitMin} min</p>
             </div>
-            <div className="p-2.5 rounded-lg bg-slate-950 border border-white/5">
-              <p className="text-[10px] text-slate-400 uppercase">Queue Density</p>
-              <p className="text-sm font-bold text-white">{selectedLocation.queueDensityPercent}%</p>
+            <div className="p-2.5 rounded-lg bg-white dark:bg-slate-950 border border-slate-200 dark:border-white/5">
+              <p className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-semibold">Queue Density</p>
+              <p className="text-sm font-bold text-slate-900 dark:text-white">{selectedLocation.queueDensityPercent}%</p>
             </div>
-            <div className="p-2.5 rounded-lg bg-slate-950 border border-white/5">
-              <p className="text-[10px] text-slate-400 uppercase">Best Time Window</p>
-              <p className="text-xs font-semibold text-emerald-400 truncate">
+            <div className="p-2.5 rounded-lg bg-white dark:bg-slate-950 border border-slate-200 dark:border-white/5">
+              <p className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-semibold">Best Time Window</p>
+              <p className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 truncate">
                 {selectedLocation.recommendedTimeWindow}
               </p>
             </div>

@@ -12,7 +12,7 @@ export default function MapPage() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   return (
-    <div className="flex h-screen overflow-hidden bg-[#070A11]">
+    <div className="flex h-screen overflow-hidden bg-slate-50 dark:bg-[#070A11]">
       <div className="hidden md:block">
         <Sidebar
           collapsed={sidebarCollapsed}
@@ -26,13 +26,13 @@ export default function MapPage() {
         <main className="flex-1 overflow-y-auto custom-scrollbar p-4 sm:p-6 lg:p-8 space-y-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-xs font-bold uppercase tracking-wider text-teal-400">
+              <p className="text-xs font-bold uppercase tracking-wider text-teal-600 dark:text-teal-400">
                 Spatial Crowd Navigation
               </p>
-              <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight flex items-center gap-2">
+              <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight flex items-center gap-2">
                 Campus Map Overview
               </h1>
-              <p className="text-xs text-slate-400 mt-1">
+              <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">
                 Visual status layout of all monitored campus service points.
               </p>
             </div>

@@ -23,7 +23,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
-      <body className="bg-[#070A11] text-slate-100 antialiased min-h-screen flex flex-col selection:bg-teal-500/30 selection:text-teal-200">
+      <body className="bg-slate-50 dark:bg-[#070A11] text-slate-900 dark:text-slate-100 antialiased min-h-screen flex flex-col selection:bg-teal-500/30 selection:text-teal-200">
         <QueueProvider>
           <DemoModeBanner />
           <main className="flex-1 flex flex-col">{children}</main>

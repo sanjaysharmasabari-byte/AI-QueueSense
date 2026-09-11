@@ -49,7 +49,7 @@ export default function ArchitecturePage() {
   ];
 
   return (
-    <div className="flex h-screen overflow-hidden bg-[#070A11]">
+    <div className="flex h-screen overflow-hidden bg-slate-50 dark:bg-[#070A11]">
       <div className="hidden md:block">
         <Sidebar
           collapsed={sidebarCollapsed}
@@ -63,13 +63,13 @@ export default function ArchitecturePage() {
         <main className="flex-1 overflow-y-auto custom-scrollbar p-4 sm:p-6 lg:p-8 space-y-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-xs font-bold uppercase tracking-wider text-cyan-400">
+              <p className="text-xs font-bold uppercase tracking-wider text-cyan-600 dark:text-cyan-400">
                 End-to-End System Design
               </p>
-              <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight flex items-center gap-2">
+              <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight flex items-center gap-2">
                 Camera to Dashboard Pipeline
               </h1>
-              <p className="text-xs text-slate-400 mt-1">
+              <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">
                 Full architectural pipeline connecting optical video capture, YOLOv8 inference, Python FastAPI, and Next.js frontend.
               </p>
             </div>
@@ -78,7 +78,7 @@ export default function ArchitecturePage() {
           {/* Flow Diagram (Matching Claude Screenshot Architecture) */}
           <div className="max-w-2xl mx-auto py-4 space-y-3">
             <div className="text-center pb-2">
-              <span className="text-[11px] font-mono text-slate-400 bg-slate-900 border border-white/10 px-3 py-1 rounded-full">
+              <span className="text-[11px] font-mono text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-white/10 px-3 py-1 rounded-full">
                 Full camera to dashboard pipeline architecture
               </span>
             </div>

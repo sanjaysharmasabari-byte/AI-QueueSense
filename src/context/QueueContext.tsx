@@ -1,8 +1,8 @@
 /**
  * AI QueueSense - Global Context Provider & Live Simulation Engine
  * 
- * NOTE: Contains the in-memory state management and ~3.5s randomized interval simulation
- * that perturbs location counts, updates camera feeds, and fires surge alerts.
+ * NOTE: Contains the in-memory state management, theme controls (Dark/Light Mode),
+ * and ~3.5s randomized interval simulation that perturbs location counts, updates camera feeds, and fires surge alerts.
  * All computer vision and AI forecasts are simulated for prototype demonstration.
  */
 
@@ -24,6 +24,8 @@ import {
 } from '@/lib/mockData';
 import { calculateCongestionLevel, calculateQueueDensity, estimateWaitTime } from '@/lib/queueEngine';
 
+export type ThemeMode = 'dark' | 'light';
+
 interface QueueContextType {
   locations: LocationItem[];
   cameras: CameraFeed[];
@@ -31,8 +33,11 @@ interface QueueContextType {
   thresholds: ThresholdSettings;
   role: UserRole;
   demoMode: boolean;
+  theme: ThemeMode;
   setRole: (role: UserRole) => void;
   setDemoMode: (enabled: boolean) => void;
+  setTheme: (theme: ThemeMode) => void;
+  toggleTheme: () => void;
   updateLocationCount: (id: string, newCount: number) => void;
   updateThresholds: (newThresholds: Partial<ThresholdSettings>) => void;
   markAlertRead: (id: string) => void;
@@ -51,14 +56,46 @@ export const QueueProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [thresholds, setThresholds] = useState<ThresholdSettings>(DEFAULT_THRESHOLDS);
   const [role, setRoleState] = useState<UserRole>('guest');
   const [demoMode, setDemoMode] = useState<boolean>(true);
+  const [theme, setThemeState] = useState<ThemeMode>('dark');
 
-  // Restore role from localStorage if present
+  // Restore role & theme from localStorage if present
   useEffect(() => {
     const savedRole = localStorage.getItem('queuesense_role') as UserRole;
     if (savedRole) {
       setRoleState(savedRole);
     }
+
+    const savedTheme = localStorage.getItem('queuesense_theme') as ThemeMode;
+    if (savedTheme) {
+      setThemeState(savedTheme);
+      if (savedTheme === 'dark') {
+        document.documentElement.classList.add('dark');
+        document.documentElement.classList.remove('light');
+      } else {
+        document.documentElement.classList.remove('dark');
+        document.documentElement.classList.add('light');
+      }
+    } else {
+      document.documentElement.classList.add('dark');
+    }
   }, []);
+
+  const setTheme = (newTheme: ThemeMode) => {
+    setThemeState(newTheme);
+    localStorage.setItem('queuesense_theme', newTheme);
+    if (newTheme === 'dark') {
+      document.documentElement.classList.add('dark');
+      document.documentElement.classList.remove('light');
+    } else {
+      document.documentElement.classList.remove('dark');
+      document.documentElement.classList.add('light');
+    }
+  };
+
+  const toggleTheme = () => {
+    const nextTheme = theme === 'dark' ? 'light' : 'dark';
+    setTheme(nextTheme);
+  };
 
   const setRole = (newRole: UserRole) => {
     setRoleState(newRole);
@@ -201,8 +238,11 @@ export const QueueProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         thresholds,
         role,
         demoMode,
+        theme,
         setRole,
         setDemoMode,
+        setTheme,
+        toggleTheme,
         updateLocationCount,
         updateThresholds,
         markAlertRead,

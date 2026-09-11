@@ -99,11 +99,11 @@ export default function LandingPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#070A11] flex flex-col">
+    <div className="min-h-screen bg-slate-50 dark:bg-[#070A11] text-slate-900 dark:text-slate-100 flex flex-col">
       <Navbar />
 
       {/* Hero Section */}
-      <section className="relative pt-16 pb-20 overflow-hidden bg-hero-gradient">
+      <section className="relative pt-16 pb-20 overflow-hidden">
         {/* Glow ambient background elements */}
         <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-teal-500/10 rounded-full blur-[120px] pointer-events-none" />
 
@@ -111,19 +111,19 @@ export default function LandingPage() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             {/* Left Copy */}
             <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-500/10 border border-teal-500/30 text-teal-300 text-xs font-semibold tracking-wider uppercase">
-                <Sparkles className="w-3.5 h-3.5 text-teal-400" />
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-500/10 border border-teal-500/30 text-teal-700 dark:text-teal-300 text-xs font-semibold tracking-wider uppercase">
+                <Sparkles className="w-3.5 h-3.5 text-teal-600 dark:text-teal-400" />
                 AI-POWERED CAMPUS INTELLIGENCE
               </div>
 
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-[1.1]">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-[1.1]">
                 Smarter Queues. <br />
-                <span className="bg-gradient-to-r from-teal-300 via-cyan-400 to-teal-400 bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-teal-600 via-cyan-500 to-teal-500 dark:from-teal-300 dark:via-cyan-400 dark:to-teal-400 bg-clip-text text-transparent">
                   Shorter Waits.
                 </span>
               </h1>
 
-              <p className="text-base sm:text-lg text-slate-300 max-w-2xl leading-relaxed font-normal">
+              <p className="text-base sm:text-lg text-slate-600 dark:text-slate-300 max-w-2xl leading-relaxed font-normal">
                 AI QueueSense uses real-time people counting, queue-density analysis, and waiting-time prediction to help campuses reduce congestion and improve service efficiency.
               </p>
 

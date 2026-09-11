@@ -127,11 +127,11 @@ export const CameraMonitor: React.FC<CameraMonitorProps> = ({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
         <div>
           <div className="flex items-center gap-2">
-            <Camera className="w-4 h-4 text-teal-400" />
-            <h3 className="font-bold text-sm text-white">{camera.locationName}</h3>
-            <span className="text-xs text-slate-400 font-mono">({camera.code})</span>
+            <Camera className="w-4 h-4 text-teal-600 dark:text-teal-400" />
+            <h3 className="font-bold text-sm text-slate-900 dark:text-white">{camera.locationName}</h3>
+            <span className="text-xs text-slate-500 dark:text-slate-400 font-mono">({camera.code})</span>
           </div>
-          <p className="text-[11px] text-slate-400 mt-0.5">
+          <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
             YOLOv8 Computer Vision Live Inference Stream
           </p>
         </div>
@@ -141,7 +141,7 @@ export const CameraMonitor: React.FC<CameraMonitorProps> = ({
           <select
             value={camera.id}
             onChange={(e) => onCameraSelect(e.target.value)}
-            className="px-3 py-1.5 bg-slate-950 border border-white/15 rounded-lg text-xs text-teal-300 font-medium focus:outline-none focus:border-teal-500"
+            className="px-3 py-1.5 bg-slate-100 dark:bg-slate-950 border border-slate-300 dark:border-white/15 rounded-lg text-xs text-teal-700 dark:text-teal-300 font-medium focus:outline-none focus:border-teal-500"
           >
             {allCameras.map((c) => (
               <option key={c.id} value={c.id}>

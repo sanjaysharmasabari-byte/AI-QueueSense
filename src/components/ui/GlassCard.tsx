@@ -20,18 +20,21 @@ export const GlassCard: React.FC<GlassCardProps> = ({
 }) => {
   const glowStyles = {
     none: '',
-    teal: 'border-teal-500/30 shadow-[0_0_20px_rgba(0,242,254,0.1)]',
-    cyan: 'border-cyan-500/30 shadow-[0_0_20px_rgba(14,165,233,0.1)]',
-    amber: 'border-amber-500/30 shadow-[0_0_20px_rgba(245,158,11,0.1)]',
-    red: 'border-red-500/30 shadow-[0_0_20px_rgba(239,68,68,0.1)]',
+    teal: 'dark:border-teal-500/30 border-teal-400/40 shadow-[0_0_20px_rgba(0,242,254,0.1)]',
+    cyan: 'dark:border-cyan-500/30 border-cyan-400/40 shadow-[0_0_20px_rgba(14,165,233,0.1)]',
+    amber: 'dark:border-amber-500/30 border-amber-400/40 shadow-[0_0_20px_rgba(245,158,11,0.1)]',
+    red: 'dark:border-red-500/30 border-red-400/40 shadow-[0_0_20px_rgba(239,68,68,0.1)]',
   };
 
   return (
     <div
       className={twMerge(
         clsx(
-          'relative rounded-xl border border-white/10 bg-slate-900/60 backdrop-blur-md transition-all duration-300',
-          hoverEffect && 'hover:border-teal-500/40 hover:bg-slate-900/80 hover:shadow-lg hover:shadow-teal-950/30',
+          'relative rounded-xl border backdrop-blur-md transition-all duration-300',
+          'bg-white/80 border-slate-200 text-slate-800 shadow-md shadow-slate-200/50',
+          'dark:bg-slate-900/60 dark:border-white/10 dark:text-slate-100 dark:shadow-none',
+          hoverEffect &&
+            'hover:border-teal-500/40 hover:shadow-lg dark:hover:bg-slate-900/80 hover:bg-white',
           glowStyles[glow],
           className
         )

@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useQueue } from '@/context/QueueContext';
+import { ThemeToggle } from '@/components/ui/ThemeToggle';
 import {
   Scan,
   UserCheck,
@@ -38,7 +39,7 @@ export const Navbar: React.FC = () => {
   ];
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-white/10 bg-slate-950/80 backdrop-blur-xl transition-all">
+    <header className="sticky top-0 z-40 w-full border-b border-slate-200 dark:border-white/10 bg-white/90 dark:bg-slate-950/80 backdrop-blur-xl transition-all">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         {/* Brand Logo */}
         <Link href="/" className="flex items-center gap-3 group">
@@ -49,14 +50,14 @@ export const Navbar: React.FC = () => {
           </div>
           <div>
             <div className="flex items-center gap-1.5">
-              <span className="font-bold text-lg tracking-tight text-white group-hover:text-teal-300 transition-colors">
+              <span className="font-bold text-lg tracking-tight text-slate-900 dark:text-white group-hover:text-teal-500 dark:group-hover:text-teal-300 transition-colors">
                 AI QueueSense
               </span>
-              <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-teal-500/20 text-teal-300 border border-teal-500/30">
+              <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-teal-500/20 text-teal-600 dark:text-teal-300 border border-teal-500/30">
                 PRO
               </span>
             </div>
-            <p className="text-[10px] text-slate-400 -mt-0.5 tracking-wide hidden sm:block">
+            <p className="text-[10px] text-slate-500 dark:text-slate-400 -mt-0.5 tracking-wide hidden sm:block">
               Smarter Queues. Shorter Waits.
             </p>
           </div>
@@ -72,8 +73,8 @@ export const Navbar: React.FC = () => {
                 href={link.href}
                 className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-all ${
                   isActive
-                    ? 'text-teal-300 bg-teal-500/10 border border-teal-500/20'
-                    : 'text-slate-300 hover:text-white hover:bg-white/5'
+                    ? 'text-teal-600 dark:text-teal-300 bg-teal-500/10 border border-teal-500/20'
+                    : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5'
                 }`}
               >
                 {link.name}
@@ -82,8 +83,10 @@ export const Navbar: React.FC = () => {
           })}
         </nav>
 
-        {/* Right CTA / Role Switcher */}
+        {/* Right CTA / Theme & Role Switcher */}
         <div className="hidden md:flex items-center gap-3">
+          <ThemeToggle />
+
           {/* Quick Demo Role Switcher */}
           <div className="flex items-center bg-slate-900 border border-white/10 rounded-lg p-0.5">
             <button

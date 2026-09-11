@@ -35,7 +35,7 @@ export default function QueueDetailPage({
   const camera = cameras.find((c) => c.locationId === location.id) || cameras[0];
 
   return (
-    <div className="flex h-screen overflow-hidden bg-[#070A11]">
+    <div className="flex h-screen overflow-hidden bg-slate-50 dark:bg-[#070A11]">
       <div className="hidden md:block">
         <Sidebar
           collapsed={sidebarCollapsed}
@@ -51,7 +51,7 @@ export default function QueueDetailPage({
           <div className="flex items-center justify-between">
             <Link
               href="/student/dashboard"
-              className="inline-flex items-center gap-1.5 text-xs text-slate-400 hover:text-teal-300 transition-colors"
+              className="inline-flex items-center gap-1.5 text-xs text-slate-600 dark:text-slate-400 hover:text-teal-600 dark:hover:text-teal-300 transition-colors font-medium"
             >
               <ArrowLeft className="w-4 h-4" /> Back to Dashboard
             </Link>
@@ -66,38 +66,38 @@ export default function QueueDetailPage({
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
               <div>
                 <div className="flex items-center gap-2 mb-1">
-                  <span className="text-xs uppercase font-bold tracking-wider text-slate-400">
+                  <span className="text-xs uppercase font-bold tracking-wider text-slate-500 dark:text-slate-400">
                     {location.category} Counter
                   </span>
                   <QueueStatusBadge status={location.status} size="lg" />
                 </div>
-                <h1 className="text-3xl font-extrabold text-white tracking-tight">
+                <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
                   {location.name} Queue
                 </h1>
-                <p className="text-xs text-slate-400 mt-1 max-w-2xl">
+                <p className="text-xs text-slate-600 dark:text-slate-400 mt-1 max-w-2xl">
                   {location.description}
                 </p>
               </div>
 
               {/* Large Status Banner Widget */}
-              <div className="p-4 rounded-xl bg-slate-950/80 border border-white/10 flex items-center gap-4">
-                <div className="text-center pr-4 border-r border-white/10">
-                  <p className="text-[10px] text-slate-400 uppercase font-bold">STATUS</p>
+              <div className="p-4 rounded-xl bg-slate-100 dark:bg-slate-950/80 border border-slate-200 dark:border-white/10 flex items-center gap-4">
+                <div className="text-center pr-4 border-r border-slate-200 dark:border-white/10">
+                  <p className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-bold">STATUS</p>
                   <p
                     className={`text-lg font-black ${
                       location.status === 'High'
-                        ? 'text-rose-400'
+                        ? 'text-rose-500 dark:text-rose-400'
                         : location.status === 'Medium'
-                        ? 'text-amber-400'
-                        : 'text-emerald-400'
+                        ? 'text-amber-500 dark:text-amber-400'
+                        : 'text-emerald-500 dark:text-emerald-400'
                     }`}
                   >
                     {location.status.toUpperCase()}
                   </p>
                 </div>
                 <div className="text-left">
-                  <p className="text-[10px] text-slate-400 uppercase font-bold">ESTIMATED WAIT</p>
-                  <p className="text-2xl font-extrabold text-teal-300">
+                  <p className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-bold">ESTIMATED WAIT</p>
+                  <p className="text-2xl font-extrabold text-teal-600 dark:text-teal-300">
                     {location.estimatedWaitMin} <span className="text-xs font-normal">min</span>
                   </p>
                 </div>
@@ -105,33 +105,33 @@ export default function QueueDetailPage({
             </div>
 
             {/* 4 Core Metrics Grid (Section 9 Requirements) */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6 pt-6 border-t border-white/10">
-              <div className="p-3 rounded-lg bg-slate-950/60 border border-white/5">
-                <div className="flex items-center gap-2 text-slate-400 text-xs mb-1">
-                  <Users className="w-3.5 h-3.5 text-teal-400" /> Current People
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6 pt-6 border-t border-slate-200 dark:border-white/10">
+              <div className="p-3 rounded-lg bg-slate-100/70 dark:bg-slate-950/60 border border-slate-200 dark:border-white/5">
+                <div className="flex items-center gap-2 text-slate-600 dark:text-slate-400 text-xs mb-1">
+                  <Users className="w-3.5 h-3.5 text-teal-600 dark:text-teal-400" /> Current People
                 </div>
-                <p className="text-xl font-bold text-white">{location.peopleCount}</p>
+                <p className="text-xl font-bold text-slate-900 dark:text-white">{location.peopleCount}</p>
               </div>
 
-              <div className="p-3 rounded-lg bg-slate-950/60 border border-white/5">
-                <div className="flex items-center gap-2 text-slate-400 text-xs mb-1">
-                  <Clock className="w-3.5 h-3.5 text-cyan-400" /> Estimated Wait
+              <div className="p-3 rounded-lg bg-slate-100/70 dark:bg-slate-950/60 border border-slate-200 dark:border-white/5">
+                <div className="flex items-center gap-2 text-slate-600 dark:text-slate-400 text-xs mb-1">
+                  <Clock className="w-3.5 h-3.5 text-cyan-600 dark:text-cyan-400" /> Estimated Wait
                 </div>
-                <p className="text-xl font-bold text-cyan-300">{location.estimatedWaitMin} minutes</p>
+                <p className="text-xl font-bold text-cyan-600 dark:text-cyan-300">{location.estimatedWaitMin} minutes</p>
               </div>
 
-              <div className="p-3 rounded-lg bg-slate-950/60 border border-white/5">
-                <div className="flex items-center gap-2 text-slate-400 text-xs mb-1">
-                  <Activity className="w-3.5 h-3.5 text-amber-400" /> Queue Density
+              <div className="p-3 rounded-lg bg-slate-100/70 dark:bg-slate-950/60 border border-slate-200 dark:border-white/5">
+                <div className="flex items-center gap-2 text-slate-600 dark:text-slate-400 text-xs mb-1">
+                  <Activity className="w-3.5 h-3.5 text-amber-500 dark:text-amber-400" /> Queue Density
                 </div>
-                <p className="text-xl font-bold text-amber-300">{location.queueDensityPercent}%</p>
+                <p className="text-xl font-bold text-amber-600 dark:text-amber-300">{location.queueDensityPercent}%</p>
               </div>
 
-              <div className="p-3 rounded-lg bg-slate-950/60 border border-white/5">
-                <div className="flex items-center gap-2 text-slate-400 text-xs mb-1">
-                  <Zap className="w-3.5 h-3.5 text-emerald-400" /> Avg Service Time
+              <div className="p-3 rounded-lg bg-slate-100/70 dark:bg-slate-950/60 border border-slate-200 dark:border-white/5">
+                <div className="flex items-center gap-2 text-slate-600 dark:text-slate-400 text-xs mb-1">
+                  <Zap className="w-3.5 h-3.5 text-emerald-500 dark:text-emerald-400" /> Avg Service Time
                 </div>
-                <p className="text-xl font-bold text-white">{location.avgServiceTimeSec} sec/person</p>
+                <p className="text-xl font-bold text-slate-900 dark:text-white">{location.avgServiceTimeSec} sec/person</p>
               </div>
             </div>
           </GlassCard>

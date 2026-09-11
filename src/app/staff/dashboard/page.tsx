@@ -36,7 +36,7 @@ export default function StaffDashboardPage() {
   );
 
   return (
-    <div className="flex h-screen overflow-hidden bg-[#070A11]">
+    <div className="flex h-screen overflow-hidden bg-slate-50 dark:bg-[#070A11]">
       <div className="hidden md:block">
         <Sidebar
           collapsed={sidebarCollapsed}
@@ -51,13 +51,13 @@ export default function StaffDashboardPage() {
           {/* Header */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-              <p className="text-xs font-bold uppercase tracking-wider text-cyan-400">
+              <p className="text-xs font-bold uppercase tracking-wider text-cyan-600 dark:text-cyan-400">
                 Staff Operations Portal
               </p>
-              <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+              <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
                 Operations Control Center
               </h1>
-              <p className="text-xs text-slate-400 mt-1">
+              <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">
                 Real-time optical camera stream supervision, load balancing, and AI decision suggestions.
               </p>
             </div>
@@ -65,7 +65,7 @@ export default function StaffDashboardPage() {
             <div className="flex items-center gap-2">
               <Link
                 href="/camera"
-                className="px-3.5 py-2 rounded-lg bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 text-xs font-bold hover:bg-cyan-500/20 transition-all flex items-center gap-1.5"
+                className="px-3.5 py-2 rounded-lg bg-cyan-500/10 border border-cyan-500/30 text-cyan-700 dark:text-cyan-300 text-xs font-bold hover:bg-cyan-500/20 transition-all flex items-center gap-1.5"
               >
                 <Camera className="w-4 h-4" />
                 All Camera Feeds ({cameras.length})
@@ -123,14 +123,14 @@ export default function StaffDashboardPage() {
             <div className="lg:col-span-5 space-y-4">
               <GlassCard className="p-4 sm:p-5 h-full flex flex-col justify-between">
                 <div>
-                  <div className="flex items-center justify-between pb-3 border-b border-white/10 mb-3">
+                  <div className="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-white/10 mb-3">
                     <div className="flex items-center gap-2">
-                      <Activity className="w-4 h-4 text-teal-400" />
-                      <h3 className="font-bold text-sm text-white">Live Queue Monitor</h3>
+                      <Activity className="w-4 h-4 text-teal-500 dark:text-teal-400" />
+                      <h3 className="font-bold text-sm text-slate-900 dark:text-white">Live Queue Monitor</h3>
                     </div>
                     <Link
                       href="/locations"
-                      className="text-[11px] text-teal-400 hover:underline flex items-center gap-1"
+                      className="text-[11px] text-teal-600 dark:text-teal-400 hover:underline flex items-center gap-1 font-semibold"
                     >
                       Directory <ArrowRight className="w-3 h-3" />
                     </Link>
@@ -142,24 +142,24 @@ export default function StaffDashboardPage() {
                       <Link
                         key={loc.id}
                         href={`/queue/${loc.id}`}
-                        className="p-3 rounded-lg bg-slate-950/60 border border-white/5 hover:border-teal-500/30 flex items-center justify-between transition-all group"
+                        className="p-3 rounded-lg bg-slate-100 dark:bg-slate-950/60 border border-slate-200 dark:border-white/5 hover:border-teal-500/30 flex items-center justify-between transition-all group"
                       >
                         <div className="space-y-0.5">
                           <div className="flex items-center gap-2">
-                            <span className="font-bold text-xs text-white group-hover:text-teal-300">
+                            <span className="font-bold text-xs text-slate-900 dark:text-white group-hover:text-teal-600 dark:group-hover:text-teal-300">
                               {loc.name}
                             </span>
                             <span className="text-[10px] text-slate-500">{loc.cameraCode}</span>
                           </div>
-                          <p className="text-[11px] text-slate-400">
+                          <p className="text-[11px] text-slate-600 dark:text-slate-400">
                             {loc.peopleCount} people • Density: {loc.queueDensityPercent}%
                           </p>
                         </div>
 
                         <div className="text-right flex flex-col items-end gap-1">
                           <QueueStatusBadge status={loc.status} size="sm" />
-                          <span className="text-[10px] text-slate-400">
-                            Est. wait: <strong className="text-slate-200">{loc.estimatedWaitMin} min</strong>
+                          <span className="text-[10px] text-slate-500 dark:text-slate-400">
+                            Est. wait: <strong className="text-slate-900 dark:text-slate-200">{loc.estimatedWaitMin} min</strong>
                           </span>
                         </div>
                       </Link>
@@ -167,9 +167,9 @@ export default function StaffDashboardPage() {
                   </div>
                 </div>
 
-                <div className="pt-3 border-t border-white/10 text-[11px] text-slate-400 flex items-center justify-between">
+                <div className="pt-3 border-t border-slate-200 dark:border-white/10 text-[11px] text-slate-500 dark:text-slate-400 flex items-center justify-between">
                   <span>Automatic inference sampling active</span>
-                  <span className="text-teal-300 font-semibold">FPS: 4.8</span>
+                  <span className="text-teal-600 dark:text-teal-300 font-semibold">FPS: 4.8</span>
                 </div>
               </GlassCard>
             </div>

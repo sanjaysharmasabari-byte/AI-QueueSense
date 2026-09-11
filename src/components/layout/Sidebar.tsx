@@ -4,6 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useQueue } from '@/context/QueueContext';
+import { ThemeToggle } from '@/components/ui/ThemeToggle';
 import {
   LayoutDashboard,
   Users,
@@ -91,24 +92,26 @@ export const Sidebar: React.FC<SidebarProps> = ({
   return (
     <aside
       className={clsx(
-        'relative flex flex-col h-full bg-slate-950 border-r border-white/10 transition-all duration-300 z-30 select-none',
+        'relative flex flex-col h-full border-r transition-all duration-300 z-30 select-none',
+        'bg-white border-slate-200 text-slate-800',
+        'dark:bg-slate-950 dark:border-white/10 dark:text-slate-100',
         collapsed ? 'w-16' : 'w-64'
       )}
     >
       {/* Brand Header */}
-      <div className="h-16 px-4 flex items-center justify-between border-b border-white/10">
+      <div className="h-16 px-4 flex items-center justify-between border-b border-slate-200 dark:border-white/10">
         <Link href="/" className="flex items-center gap-3 overflow-hidden">
           <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-teal-500 to-cyan-400 p-[1px] shrink-0">
-            <div className="w-full h-full bg-slate-950 rounded-[7px] flex items-center justify-center">
+            <div className="w-full h-full bg-slate-900 dark:bg-slate-950 rounded-[7px] flex items-center justify-center">
               <Sparkles className="w-4 h-4 text-teal-400" />
             </div>
           </div>
           {!collapsed && (
             <div className="truncate">
-              <span className="font-bold text-sm text-white tracking-tight">
+              <span className="font-bold text-sm text-slate-900 dark:text-white tracking-tight">
                 AI QueueSense
               </span>
-              <p className="text-[10px] text-teal-400 -mt-0.5 font-medium uppercase tracking-wider">
+              <p className="text-[10px] text-teal-600 dark:text-teal-400 -mt-0.5 font-medium uppercase tracking-wider">
                 {role} Portal
               </p>
             </div>
@@ -118,7 +121,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         {onToggleCollapse && (
           <button
             onClick={onToggleCollapse}
-            className="p-1 rounded-md text-slate-400 hover:text-white hover:bg-white/5 transition-colors hidden md:block"
+            className="p-1 rounded-md text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors hidden md:block"
             title={collapsed ? 'Expand Sidebar' : 'Collapse Sidebar'}
           >
             {collapsed ? (
@@ -143,8 +146,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
               className={clsx(
                 'group flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-medium transition-all relative',
                 isActive
-                  ? 'bg-teal-500/15 text-teal-300 border border-teal-500/30 font-semibold'
-                  : 'text-slate-400 hover:text-slate-100 hover:bg-white/5 border border-transparent'
+                  ? 'bg-teal-500/15 text-teal-600 dark:text-teal-300 border border-teal-500/30 font-semibold'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-white/5 border border-transparent'
               )}
               title={collapsed ? item.name : undefined}
             >
@@ -152,8 +155,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 className={clsx(
                   'w-4 h-4 shrink-0 transition-colors',
                   isActive
-                    ? 'text-teal-400'
-                    : 'text-slate-400 group-hover:text-teal-300'
+                    ? 'text-teal-600 dark:text-teal-400'
+                    : 'text-slate-400 group-hover:text-teal-500 dark:group-hover:text-teal-300'
                 )}
               />
               {!collapsed && <span className="truncate">{item.name}</span>}
@@ -175,28 +178,32 @@ export const Sidebar: React.FC<SidebarProps> = ({
         })}
       </div>
 
-      {/* Footer Role Widget */}
+      {/* Footer Role & Theme Widget */}
       {!collapsed && (
-        <div className="p-3 border-t border-white/10 bg-slate-900/50 m-2 rounded-xl">
+        <div className="p-3 border-t border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-slate-900/50 m-2 rounded-xl space-y-2">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <div className="w-7 h-7 rounded-full bg-slate-800 border border-teal-500/40 flex items-center justify-center text-xs font-bold text-teal-300">
+              <div className="w-7 h-7 rounded-full bg-slate-200 dark:bg-slate-800 border border-teal-500/40 flex items-center justify-center text-xs font-bold text-teal-600 dark:text-teal-300">
                 {role === 'staff' ? 'ST' : 'SD'}
               </div>
               <div className="truncate">
-                <p className="text-xs font-medium text-slate-200">
+                <p className="text-xs font-medium text-slate-800 dark:text-slate-200">
                   {role === 'staff' ? 'Demo Staff' : 'Demo Student'}
                 </p>
-                <p className="text-[10px] text-slate-400">Campus Active</p>
+                <p className="text-[10px] text-slate-500 dark:text-slate-400">Campus Active</p>
               </div>
             </div>
             <Link
               href="/login"
-              className="text-slate-400 hover:text-rose-400 p-1"
+              className="text-slate-400 hover:text-rose-500 p-1"
               title="Sign Out / Change User"
             >
               <LogOut className="w-3.5 h-3.5" />
             </Link>
+          </div>
+          <div className="pt-2 border-t border-slate-200 dark:border-white/5 flex items-center justify-between">
+            <span className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Theme:</span>
+            <ThemeToggle showLabel />
           </div>
         </div>
       )}

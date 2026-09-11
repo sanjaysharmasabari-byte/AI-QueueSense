@@ -32,7 +32,7 @@ export default function SettingsPage() {
   };
 
   return (
-    <div className="flex h-screen overflow-hidden bg-[#070A11]">
+    <div className="flex h-screen overflow-hidden bg-slate-50 dark:bg-[#070A11]">
       <div className="hidden md:block">
         <Sidebar
           collapsed={sidebarCollapsed}
@@ -46,13 +46,13 @@ export default function SettingsPage() {
         <main className="flex-1 overflow-y-auto custom-scrollbar p-4 sm:p-6 lg:p-8 space-y-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-xs font-bold uppercase tracking-wider text-teal-400">
+              <p className="text-xs font-bold uppercase tracking-wider text-teal-600 dark:text-teal-400">
                 Staff Control Panel
               </p>
-              <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight flex items-center gap-2">
+              <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight flex items-center gap-2">
                 Admin Configuration
               </h1>
-              <p className="text-xs text-slate-400 mt-1">
+              <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">
                 Configure operational thresholds, camera parameters, and smart alert sensitivities.
               </p>
             </div>
@@ -61,56 +61,56 @@ export default function SettingsPage() {
           <form onSubmit={handleSave} className="space-y-6">
             {/* Congestion Threshold Configuration (Section 21 Requirement) */}
             <GlassCard glow="teal" className="p-6 space-y-4">
-              <div className="flex items-center justify-between pb-3 border-b border-white/10">
+              <div className="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-white/10">
                 <div className="flex items-center gap-2">
-                  <Sliders className="w-5 h-5 text-teal-400" />
-                  <h3 className="font-bold text-base text-white">Congestion Threshold Settings</h3>
+                  <Sliders className="w-5 h-5 text-teal-500 dark:text-teal-400" />
+                  <h3 className="font-bold text-base text-slate-900 dark:text-white">Congestion Threshold Settings</h3>
                 </div>
-                <span className="text-xs text-slate-400">
+                <span className="text-xs text-slate-500 dark:text-slate-400">
                   Customizable operational ranges
                 </span>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div className="p-4 rounded-xl bg-slate-950 border border-emerald-500/30">
-                  <span className="text-xs font-bold uppercase text-emerald-400">
+                <div className="p-4 rounded-xl bg-slate-100 dark:bg-slate-950 border border-emerald-500/30">
+                  <span className="text-xs font-bold uppercase text-emerald-600 dark:text-emerald-400">
                     Low Congestion Threshold
                   </span>
-                  <p className="text-[11px] text-slate-400 my-1">Maximum people count for LOW status</p>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400 my-1">Maximum people count for LOW status</p>
                   <div className="flex items-center gap-2 mt-2">
                     <input
                       type="number"
                       value={lowMax}
                       onChange={(e) => setLowMax(Number(e.target.value))}
-                      className="w-20 px-3 py-1.5 bg-slate-900 border border-white/15 rounded-lg text-sm text-white font-bold font-mono focus:outline-none focus:border-emerald-400"
+                      className="w-20 px-3 py-1.5 bg-white dark:bg-slate-900 border border-slate-300 dark:border-white/15 rounded-lg text-sm text-slate-900 dark:text-white font-bold font-mono focus:outline-none focus:border-emerald-400"
                     />
-                    <span className="text-xs text-slate-400">people (0–{lowMax})</span>
+                    <span className="text-xs text-slate-500 dark:text-slate-400">people (0–{lowMax})</span>
                   </div>
                 </div>
 
-                <div className="p-4 rounded-xl bg-slate-950 border border-amber-500/30">
-                  <span className="text-xs font-bold uppercase text-amber-400">
+                <div className="p-4 rounded-xl bg-slate-100 dark:bg-slate-950 border border-amber-500/30">
+                  <span className="text-xs font-bold uppercase text-amber-600 dark:text-amber-400">
                     Medium Congestion Threshold
                   </span>
-                  <p className="text-[11px] text-slate-400 my-1">Maximum people count for MEDIUM status</p>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400 my-1">Maximum people count for MEDIUM status</p>
                   <div className="flex items-center gap-2 mt-2">
                     <input
                       type="number"
                       value={mediumMax}
                       onChange={(e) => setMediumMax(Number(e.target.value))}
-                      className="w-20 px-3 py-1.5 bg-slate-900 border border-white/15 rounded-lg text-sm text-white font-bold font-mono focus:outline-none focus:border-amber-400"
+                      className="w-20 px-3 py-1.5 bg-white dark:bg-slate-900 border border-slate-300 dark:border-white/15 rounded-lg text-sm text-slate-900 dark:text-white font-bold font-mono focus:outline-none focus:border-amber-400"
                     />
-                    <span className="text-xs text-slate-400">people ({lowMax + 1}–{mediumMax})</span>
+                    <span className="text-xs text-slate-500 dark:text-slate-400">people ({lowMax + 1}–{mediumMax})</span>
                   </div>
                 </div>
 
-                <div className="p-4 rounded-xl bg-slate-950 border border-rose-500/30">
-                  <span className="text-xs font-bold uppercase text-rose-400">
+                <div className="p-4 rounded-xl bg-slate-100 dark:bg-slate-950 border border-rose-500/30">
+                  <span className="text-xs font-bold uppercase text-rose-600 dark:text-rose-400">
                     High Congestion Threshold
                   </span>
-                  <p className="text-[11px] text-slate-400 my-1">Minimum people count for HIGH status</p>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400 my-1">Minimum people count for HIGH status</p>
                   <div className="mt-2">
-                    <span className="text-lg font-black text-rose-400 font-mono">
+                    <span className="text-lg font-black text-rose-600 dark:text-rose-400 font-mono">
                       {Number(mediumMax) + 1}+ people
                     </span>
                   </div>
@@ -120,20 +120,20 @@ export default function SettingsPage() {
 
             {/* Notification & Sensitivity Settings */}
             <GlassCard className="p-6 space-y-4">
-              <div className="flex items-center gap-2 pb-3 border-b border-white/10">
-                <Bell className="w-5 h-5 text-cyan-400" />
-                <h3 className="font-bold text-base text-white">Alert Sensitivity & Dispatch</h3>
+              <div className="flex items-center gap-2 pb-3 border-b border-slate-200 dark:border-white/10">
+                <Bell className="w-5 h-5 text-cyan-500 dark:text-cyan-400" />
+                <h3 className="font-bold text-base text-slate-900 dark:text-white">Alert Sensitivity & Dispatch</h3>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">
+                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                     Alert Sensitivity Level
                   </label>
                   <select
                     value={sensitivity}
                     onChange={(e) => setSensitivity(e.target.value as any)}
-                    className="w-full px-3 py-2 bg-slate-950 border border-white/15 rounded-lg text-xs text-white focus:outline-none focus:border-teal-500"
+                    className="w-full px-3 py-2 bg-slate-100 dark:bg-slate-950 border border-slate-300 dark:border-white/15 rounded-lg text-xs text-slate-900 dark:text-white focus:outline-none focus:border-teal-500"
                   >
                     <option value="low">Low (Fewer alerts, only extreme surges)</option>
                     <option value="medium">Medium (Standard campus balanced mode)</option>
@@ -141,10 +141,10 @@ export default function SettingsPage() {
                   </select>
                 </div>
 
-                <div className="flex items-center justify-between p-3 rounded-lg bg-slate-950 border border-white/10">
+                <div className="flex items-center justify-between p-3 rounded-lg bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-white/10">
                   <div>
-                    <h4 className="text-xs font-bold text-white">Auto Staff Dispatch</h4>
-                    <p className="text-[11px] text-slate-400">
+                    <h4 className="text-xs font-bold text-slate-900 dark:text-white">Auto Staff Dispatch</h4>
+                    <p className="text-[11px] text-slate-500 dark:text-slate-400">
                       Trigger auxiliary counter suggestion when queue exceeds HIGH threshold.
                     </p>
                   </div>
@@ -152,7 +152,7 @@ export default function SettingsPage() {
                     type="checkbox"
                     checked={autoNotify}
                     onChange={(e) => setAutoNotify(e.target.checked)}
-                    className="w-4 h-4 rounded border-white/10 bg-slate-900 text-teal-500 focus:ring-0"
+                    className="w-4 h-4 rounded border-slate-300 dark:border-white/10 bg-white dark:bg-slate-900 text-teal-500 focus:ring-0"
                   />
                 </div>
               </div>

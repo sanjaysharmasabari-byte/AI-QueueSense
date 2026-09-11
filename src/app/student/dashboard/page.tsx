@@ -42,7 +42,7 @@ export default function StudentDashboardPage() {
   });
 
   return (
-    <div className="flex h-screen overflow-hidden bg-[#070A11]">
+    <div className="flex h-screen overflow-hidden bg-slate-50 dark:bg-[#070A11]">
       {/* Sidebar */}
       <div className="hidden md:block">
         <Sidebar
@@ -63,19 +63,19 @@ export default function StudentDashboardPage() {
           {/* Header Banner */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-              <p className="text-xs font-bold uppercase tracking-wider text-teal-400">
+              <p className="text-xs font-bold uppercase tracking-wider text-teal-600 dark:text-teal-400">
                 Good afternoon • Student Portal
               </p>
-              <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+              <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
                 Campus Queue Overview
               </h1>
-              <p className="text-xs text-slate-400 mt-1">
+              <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">
                 Real-time congestion levels, live crowd counts, and AI-predicted waiting times.
               </p>
             </div>
 
             <div className="flex items-center gap-2">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-teal-500/10 border border-teal-500/30 text-teal-300 text-xs font-semibold">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-teal-500/10 border border-teal-500/30 text-teal-700 dark:text-teal-300 text-xs font-semibold">
                 <span className="w-2 h-2 rounded-full bg-teal-400 animate-ping" />
                 Live Camera Feeds Active
               </span>
@@ -115,15 +115,15 @@ export default function StudentDashboardPage() {
           </div>
 
           {/* Main Queue Status Cards Filter Header */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2 border-t border-white/10">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2 border-t border-slate-200 dark:border-white/10">
             <div className="flex items-center gap-2">
-              <Sparkles className="w-4 h-4 text-teal-400" />
-              <h2 className="font-bold text-base text-white">LIVE QUEUE STATUS</h2>
+              <Sparkles className="w-4 h-4 text-teal-500 dark:text-teal-400" />
+              <h2 className="font-bold text-base text-slate-900 dark:text-white">LIVE QUEUE STATUS</h2>
             </div>
 
             {/* Status Filters */}
-            <div className="flex items-center gap-1.5 bg-slate-900 border border-white/10 p-1 rounded-xl text-xs">
-              <span className="text-slate-500 text-[11px] px-2 font-medium">Filter:</span>
+            <div className="flex items-center gap-1.5 bg-slate-200/80 dark:bg-slate-900 border border-slate-300 dark:border-white/10 p-1 rounded-xl text-xs">
+              <span className="text-slate-600 dark:text-slate-500 text-[11px] px-2 font-medium">Filter:</span>
               {['ALL', 'LOW', 'MEDIUM', 'HIGH'].map((status) => (
                 <button
                   key={status}
@@ -131,7 +131,7 @@ export default function StudentDashboardPage() {
                   className={`px-3 py-1 rounded-lg font-semibold transition-all ${
                     statusFilter === status
                       ? 'bg-teal-500 text-slate-950 shadow'
-                      : 'text-slate-400 hover:text-slate-200'
+                      : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
                   }`}
                 >
                   {status}

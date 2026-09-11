@@ -25,21 +25,21 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#070A11] flex items-center justify-center p-4 relative overflow-hidden bg-hero-gradient">
+    <div className="min-h-screen bg-slate-50 dark:bg-[#070A11] flex items-center justify-center p-4 relative overflow-hidden">
       <div className="w-full max-w-md space-y-6 relative z-10">
         <div className="text-center space-y-2">
           <Link href="/" className="inline-flex items-center gap-3 group">
             <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-teal-500 to-cyan-400 p-[1px]">
-              <div className="w-full h-full bg-slate-950 rounded-[11px] flex items-center justify-center">
-                <Scan className="w-5 h-5 text-teal-400" />
+              <div className="w-full h-full bg-slate-100 dark:bg-slate-950 rounded-[11px] flex items-center justify-center">
+                <Scan className="w-5 h-5 text-teal-600 dark:text-teal-400" />
               </div>
             </div>
-            <span className="font-extrabold text-xl text-white tracking-tight">
+            <span className="font-extrabold text-xl text-slate-900 dark:text-white tracking-tight">
               AI QueueSense
             </span>
           </Link>
-          <h2 className="text-xl font-bold text-slate-200">Create Campus Account</h2>
-          <p className="text-xs text-slate-400">
+          <h2 className="text-xl font-bold text-slate-800 dark:text-slate-200">Create Campus Account</h2>
+          <p className="text-xs text-slate-600 dark:text-slate-400">
             Access live queue predictions and operational analytics
           </p>
         </div>
@@ -47,17 +47,17 @@ export default function RegisterPage() {
         <GlassCard glow="cyan" className="p-6 sm:p-8">
           <form onSubmit={handleRegister} className="space-y-4">
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">
+              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                 Select Account Role
               </label>
-              <div className="grid grid-cols-2 gap-2 p-1 bg-slate-950 rounded-lg border border-white/10">
+              <div className="grid grid-cols-2 gap-2 p-1 bg-slate-200/80 dark:bg-slate-950 rounded-lg border border-slate-300 dark:border-white/10">
                 <button
                   type="button"
                   onClick={() => setSelectedRole('student')}
                   className={`py-2 text-xs font-bold rounded-md transition-all ${
                     selectedRole === 'student'
                       ? 'bg-teal-500 text-slate-950'
-                      : 'text-slate-400 hover:text-slate-200'
+                      : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
                   }`}
                 >
                   Student

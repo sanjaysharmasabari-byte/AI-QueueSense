@@ -43,7 +43,7 @@ export default function PrivacyPage() {
   ];
 
   return (
-    <div className="flex h-screen overflow-hidden bg-[#070A11]">
+    <div className="flex h-screen overflow-hidden bg-slate-50 dark:bg-[#070A11]">
       <div className="hidden md:block">
         <Sidebar
           collapsed={sidebarCollapsed}
@@ -57,19 +57,19 @@ export default function PrivacyPage() {
         <main className="flex-1 overflow-y-auto custom-scrollbar p-4 sm:p-6 lg:p-8 space-y-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-xs font-bold uppercase tracking-wider text-emerald-400">
+              <p className="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
                 Ethical AI & Compliance Hub
               </p>
-              <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight flex items-center gap-2">
+              <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight flex items-center gap-2">
                 Privacy-First Architecture
               </h1>
-              <p className="text-xs text-slate-400 mt-1">
+              <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">
                 Transparency documentation on how AI QueueSense protects student privacy and anonymity.
               </p>
             </div>
 
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs font-bold">
-              <ShieldCheck className="w-4 h-4 text-emerald-400" /> Verified Anonymous System
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-700 dark:text-emerald-300 text-xs font-bold">
+              <ShieldCheck className="w-4 h-4 text-emerald-500 dark:text-emerald-400" /> Verified Anonymous System
             </div>
           </div>
 
@@ -79,11 +79,11 @@ export default function PrivacyPage() {
               const Icon = p.icon;
               return (
                 <GlassCard key={p.title} glow="teal" className="p-6 space-y-3">
-                  <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+                  <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-600 dark:text-emerald-400">
                     <Icon className="w-5 h-5" />
                   </div>
-                  <h3 className="font-bold text-base text-white">{p.title}</h3>
-                  <p className="text-xs text-slate-300 leading-relaxed">{p.desc}</p>
+                  <h3 className="font-bold text-base text-slate-900 dark:text-white">{p.title}</h3>
+                  <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">{p.desc}</p>
                 </GlassCard>
               );
             })}

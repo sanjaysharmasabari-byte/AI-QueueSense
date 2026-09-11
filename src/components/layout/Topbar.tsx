@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { useQueue } from '@/context/QueueContext';
+import { ThemeToggle } from '@/components/ui/ThemeToggle';
 import Link from 'next/link';
 import { Search, Bell, Sparkles, User, Check, Menu, ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -22,12 +23,12 @@ export const Topbar: React.FC<TopbarProps> = ({
   const unreadAlerts = alerts.filter((a) => !a.isRead);
 
   return (
-    <header className="h-16 border-b border-white/10 bg-slate-950/90 backdrop-blur-md px-4 sm:px-6 flex items-center justify-between z-20 shrink-0">
+    <header className="h-16 border-b border-slate-200 dark:border-white/10 bg-white/90 dark:bg-slate-950/90 backdrop-blur-md px-4 sm:px-6 flex items-center justify-between z-20 shrink-0 transition-colors">
       <div className="flex items-center gap-3 flex-1 max-w-md">
         {onMobileMenuToggle && (
           <button
             onClick={onMobileMenuToggle}
-            className="md:hidden p-2 rounded-lg bg-slate-900 border border-white/10 text-slate-300"
+            className="md:hidden p-2 rounded-lg bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-white/10 text-slate-700 dark:text-slate-300"
           >
             <Menu className="w-5 h-5" />
           </button>
@@ -41,21 +42,24 @@ export const Topbar: React.FC<TopbarProps> = ({
             value={searchQuery}
             onChange={(e) => onSearchChange && onSearchChange(e.target.value)}
             placeholder="Search queue locations (Canteen, Admin, Library)..."
-            className="w-full pl-9 pr-4 py-1.5 bg-slate-900/80 border border-white/10 rounded-xl text-xs text-white placeholder-slate-400 focus:outline-none focus:border-teal-500/50 focus:ring-1 focus:ring-teal-500/50 transition-all"
+            className="w-full pl-9 pr-4 py-1.5 bg-slate-100 dark:bg-slate-900/80 border border-slate-200 dark:border-white/10 rounded-xl text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-teal-500/50 focus:ring-1 focus:ring-teal-500/50 transition-all"
           />
         </div>
       </div>
 
       {/* Right Controls */}
       <div className="flex items-center gap-3">
+        {/* Theme Toggle Button */}
+        <ThemeToggle />
+
         {/* Role Toggle Pill */}
-        <div className="hidden sm:flex items-center gap-1 bg-slate-900/90 border border-white/10 rounded-lg p-1">
+        <div className="hidden sm:flex items-center gap-1 bg-slate-100 dark:bg-slate-900/90 border border-slate-200 dark:border-white/10 rounded-lg p-1">
           <button
             onClick={() => setRole('student')}
             className={`px-2.5 py-1 text-xs rounded-md font-medium transition-all ${
               role === 'student'
                 ? 'bg-teal-500 text-slate-950 font-bold shadow'
-                : 'text-slate-400 hover:text-slate-200'
+                : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
             }`}
           >
             Student Portal
@@ -65,7 +69,7 @@ export const Topbar: React.FC<TopbarProps> = ({
             className={`px-2.5 py-1 text-xs rounded-md font-medium transition-all ${
               role === 'staff'
                 ? 'bg-cyan-500 text-slate-950 font-bold shadow'
-                : 'text-slate-400 hover:text-slate-200'
+                : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
             }`}
           >
             Staff Command
@@ -76,10 +80,10 @@ export const Topbar: React.FC<TopbarProps> = ({
         <div className="relative">
           <button
             onClick={() => setAlertsOpen(!alertsOpen)}
-            className="relative p-2 rounded-xl bg-slate-900 border border-white/10 text-slate-300 hover:text-white hover:border-teal-500/30 transition-all"
+            className="relative p-2 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-white/10 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:border-teal-500/30 transition-all"
             aria-label="View notifications"
           >
-            <Bell className="w-4 h-4 text-slate-300" />
+            <Bell className="w-4 h-4 text-slate-700 dark:text-slate-300" />
             {unreadAlerts.length > 0 && (
               <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-rose-500 text-white font-bold text-[10px] flex items-center justify-center animate-bounce">
                 {unreadAlerts.length}
@@ -94,19 +98,19 @@ export const Topbar: React.FC<TopbarProps> = ({
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 10 }}
-                className="absolute right-0 mt-2 w-80 sm:w-96 bg-slate-900 border border-white/15 rounded-xl shadow-2xl z-50 p-3"
+                className="absolute right-0 mt-2 w-80 sm:w-96 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/15 rounded-xl shadow-2xl z-50 p-3"
               >
-                <div className="flex items-center justify-between pb-2 border-b border-white/10">
+                <div className="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-white/10">
                   <div className="flex items-center gap-2">
-                    <Sparkles className="w-4 h-4 text-teal-400" />
-                    <span className="font-semibold text-xs text-white">
+                    <Sparkles className="w-4 h-4 text-teal-500 dark:text-teal-400" />
+                    <span className="font-semibold text-xs text-slate-900 dark:text-white">
                       Live Queue Alerts ({alerts.length})
                     </span>
                   </div>
                   <Link
                     href="/alerts"
                     onClick={() => setAlertsOpen(false)}
-                    className="text-[11px] text-teal-400 hover:underline"
+                    className="text-[11px] text-teal-600 dark:text-teal-400 hover:underline"
                   >
                     View All
                   </Link>
@@ -124,19 +128,19 @@ export const Topbar: React.FC<TopbarProps> = ({
                         onClick={() => markAlertRead(alert.id)}
                         className={`p-2.5 rounded-lg border text-xs cursor-pointer transition-all ${
                           alert.isRead
-                            ? 'bg-slate-950/40 border-white/5 opacity-70'
-                            : 'bg-slate-800/80 border-teal-500/30'
+                            ? 'bg-slate-50 dark:bg-slate-950/40 border-slate-200 dark:border-white/5 opacity-70'
+                            : 'bg-slate-100 dark:bg-slate-800/80 border-teal-500/30'
                         }`}
                       >
                         <div className="flex items-center justify-between">
-                          <span className="font-bold text-slate-200">
+                          <span className="font-bold text-slate-900 dark:text-slate-200">
                             {alert.title}
                           </span>
                           <span className="text-[10px] text-slate-400">
                             {alert.timestamp}
                           </span>
                         </div>
-                        <p className="text-[11px] text-slate-300 mt-1 line-clamp-2">
+                        <p className="text-[11px] text-slate-600 dark:text-slate-300 mt-1 line-clamp-2">
                           {alert.description}
                         </p>
                       </div>
@@ -149,17 +153,17 @@ export const Topbar: React.FC<TopbarProps> = ({
         </div>
 
         {/* User Profile Menu */}
-        <div className="flex items-center gap-2 pl-2 border-l border-white/10">
+        <div className="flex items-center gap-2 pl-2 border-l border-slate-200 dark:border-white/10">
           <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-teal-500 to-cyan-500 p-[1px]">
-            <div className="w-full h-full bg-slate-950 rounded-full flex items-center justify-center">
+            <div className="w-full h-full bg-slate-900 dark:bg-slate-950 rounded-full flex items-center justify-center">
               <User className="w-4 h-4 text-teal-300" />
             </div>
           </div>
           <div className="hidden lg:block text-left">
-            <p className="text-xs font-semibold text-white leading-none">
+            <p className="text-xs font-semibold text-slate-900 dark:text-white leading-none">
               {role === 'staff' ? 'Demo Staff Officer' : 'Demo Student'}
             </p>
-            <p className="text-[10px] text-slate-400 capitalize mt-0.5">
+            <p className="text-[10px] text-slate-500 dark:text-slate-400 capitalize mt-0.5">
               {role} Account
             </p>
           </div>
