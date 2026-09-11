@@ -3,7 +3,6 @@
 import React, { useState } from 'react';
 import { Sidebar } from '@/components/layout/Sidebar';
 import { Topbar } from '@/components/layout/Topbar';
-import { Footer } from '@/components/layout/Footer';
 import { GlassCard } from '@/components/ui/GlassCard';
 import { ShieldCheck, Lock, EyeOff, FileText, CheckCircle2, Cpu } from 'lucide-react';
 
@@ -100,8 +99,6 @@ export default function PrivacyPage() {
             </p>
           </GlassCard>
         </main>
-
-        <Footer />
       </div>
     </div>
   );

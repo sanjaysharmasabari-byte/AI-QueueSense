@@ -3,7 +3,6 @@
 import React, { useState } from 'react';
 import { Sidebar } from '@/components/layout/Sidebar';
 import { Topbar } from '@/components/layout/Topbar';
-import { Footer } from '@/components/layout/Footer';
 import { useQueue } from '@/context/QueueContext';
 import { CampusMap } from '@/components/map/CampusMap';
 import { MapPin, Sparkles } from 'lucide-react';
@@ -41,8 +40,6 @@ export default function MapPage() {
 
           <CampusMap locations={locations} />
         </main>
-
-        <Footer />
       </div>
     </div>
   );

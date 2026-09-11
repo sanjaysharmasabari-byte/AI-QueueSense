@@ -3,7 +3,6 @@
 import React, { useState } from 'react';
 import { Sidebar } from '@/components/layout/Sidebar';
 import { Topbar } from '@/components/layout/Topbar';
-import { Footer } from '@/components/layout/Footer';
 import { useQueue } from '@/context/QueueContext';
 import { GlassCard } from '@/components/ui/GlassCard';
 import {
@@ -173,8 +172,6 @@ export default function AlertsPage() {
             )}
           </div>
         </main>
-
-        <Footer />
       </div>
     </div>
   );

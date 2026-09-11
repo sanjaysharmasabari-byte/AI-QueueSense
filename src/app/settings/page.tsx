@@ -3,7 +3,6 @@
 import React, { useState } from 'react';
 import { Sidebar } from '@/components/layout/Sidebar';
 import { Topbar } from '@/components/layout/Topbar';
-import { Footer } from '@/components/layout/Footer';
 import { useQueue } from '@/context/QueueContext';
 import { GlassCard } from '@/components/ui/GlassCard';
 import { Settings, Sliders, Bell, Shield, Camera, Save, CheckCircle2 } from 'lucide-react';
@@ -176,8 +175,6 @@ export default function SettingsPage() {
             </div>
           </form>
         </main>
-
-        <Footer />
       </div>
     </div>
   );

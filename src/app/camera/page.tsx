@@ -3,7 +3,6 @@
 import React, { useState } from 'react';
 import { Sidebar } from '@/components/layout/Sidebar';
 import { Topbar } from '@/components/layout/Topbar';
-import { Footer } from '@/components/layout/Footer';
 import { useQueue } from '@/context/QueueContext';
 import { CameraMonitor } from '@/components/camera/CameraMonitor';
 import { GlassCard } from '@/components/ui/GlassCard';
@@ -100,8 +99,6 @@ export default function CameraPage() {
             </div>
           </div>
         </main>
-
-        <Footer />
       </div>
     </div>
   );

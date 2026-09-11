@@ -5,7 +5,6 @@ import { notFound } from 'next/navigation';
 import { useQueue } from '@/context/QueueContext';
 import { Sidebar } from '@/components/layout/Sidebar';
 import { Topbar } from '@/components/layout/Topbar';
-import { Footer } from '@/components/layout/Footer';
 import { GlassCard } from '@/components/ui/GlassCard';
 import { QueueStatusBadge } from '@/components/ui/QueueStatusBadge';
 import { AIInsightCard } from '@/components/dashboard/AIInsightCard';
@@ -156,8 +155,6 @@ export default function QueueDetailPage({
             </div>
           </div>
         </main>
-
-        <Footer />
       </div>
     </div>
   );

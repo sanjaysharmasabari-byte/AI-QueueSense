@@ -3,7 +3,6 @@
 import React, { useState } from 'react';
 import { Sidebar } from '@/components/layout/Sidebar';
 import { Topbar } from '@/components/layout/Topbar';
-import { Footer } from '@/components/layout/Footer';
 import { useQueue } from '@/context/QueueContext';
 import { MetricCard } from '@/components/dashboard/MetricCard';
 import { CameraMonitor } from '@/components/camera/CameraMonitor';
@@ -187,8 +186,6 @@ export default function StaffDashboardPage() {
             </GlassCard>
           </div>
         </main>
-
-        <Footer />
       </div>
     </div>
   );
