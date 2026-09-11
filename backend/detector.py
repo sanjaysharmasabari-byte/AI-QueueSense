@@ -104,7 +104,7 @@ class YOLOQueueDetector:
         return frame, people_count, detections
 
 
-def estimate_queue_metrics(people_count: number, max_capacity: int = 65) -> Dict[str, Any]:
+def estimate_queue_metrics(people_count: int, max_capacity: int = 65) -> Dict[str, Any]:
     """
     Calculate queue density, congestion level, and estimated wait duration.
     """
