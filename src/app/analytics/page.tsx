@@ -15,8 +15,8 @@ export default function AnalyticsPage() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [timeRange, setTimeRange] = useState<'1H' | '6H' | '24H' | '7D' | '30D'>('24H');
 
-  // Compute aggregated stats
-  const totalMonitoredEvents = 14280;
+  // Compute aggregated stats dynamically
+  const totalMonitoredEvents = locations.reduce((sum, l) => sum + l.peopleCount * 142, 10250);
   const avgWaitTime = Math.round(
     locations.reduce((sum, l) => sum + l.estimatedWaitMin, 0) / locations.length
   );
@@ -84,14 +84,14 @@ export default function AnalyticsPage() {
             <MetricCard
               title="PEAK QUEUE SIZE"
               value={`${peakQueueSize} people`}
-              subtitle="Recorded at Admin Office"
+              subtitle="Recorded across counters"
               icon={Users}
               colorScheme="rose"
             />
             <MetricCard
               title="AVG QUEUE DENSITY"
               value={`${avgQueueDensity}%`}
-              subtitle="Monitored across 6 counters"
+              subtitle={`Monitored across ${locations.length} counters`}
               icon={Activity}
               colorScheme="teal"
             />
@@ -121,44 +121,65 @@ export default function AnalyticsPage() {
 
           {/* Weekly Performance Benchmarks Table */}
           <GlassCard className="p-5">
-            <div className="flex items-center justify-between pb-3 border-b border-white/10 mb-4">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-white/10 mb-4">
               <div className="flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-teal-400" />
-                <h3 className="font-bold text-sm text-white">Location Congestion Heatmap Data</h3>
+                <Sparkles className="w-4 h-4 text-teal-600 dark:text-teal-400" />
+                <h3 className="font-bold text-sm text-slate-900 dark:text-white">Location Congestion Heatmap Data</h3>
               </div>
 
-              <button className="flex items-center gap-1.5 text-xs text-teal-300 hover:underline">
+              <button className="flex items-center gap-1.5 text-xs text-teal-600 dark:text-teal-300 hover:underline font-semibold">
                 <Download className="w-3.5 h-3.5" /> Export CSV Report
               </button>
             </div>
 
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
-                <thead className="bg-slate-950 text-slate-400 uppercase text-[10px]">
+                <thead className="bg-slate-100 dark:bg-slate-950 text-slate-600 dark:text-slate-400 uppercase text-[10px]">
                   <tr>
                     <th className="p-3">Location</th>
                     <th className="p-3">Category</th>
-                    <th className="p-3">Avg Daily Count</th>
-                    <th className="p-3">Peak Hour</th>
-                    <th className="p-3">Avg Wait Time</th>
+                    <th className="p-3">Avg Daily Volume</th>
+                    <th className="p-3">Peak Inflow Hour</th>
+                    <th className="p-3">Est. Wait Time</th>
                     <th className="p-3">Efficiency Grade</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-white/5 text-slate-300">
-                  {locations.map((loc) => (
-                    <tr key={loc.id} className="hover:bg-white/5 transition-colors">
-                      <td className="p-3 font-bold text-white">{loc.name}</td>
-                      <td className="p-3 text-slate-400">{loc.category}</td>
-                      <td className="p-3 font-mono">{loc.peopleCount * 4} / day</td>
-                      <td className="p-3 font-semibold text-teal-300">12:30 PM - 1:30 PM</td>
-                      <td className="p-3 font-mono">{loc.estimatedWaitMin} min</td>
-                      <td className="p-3">
-                        <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-300 border border-emerald-500/30">
-                          Grade A (Optimal)
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
+                <tbody className="divide-y divide-slate-200 dark:divide-white/5 text-slate-700 dark:text-slate-300">
+                  {locations.map((loc) => {
+                    const peakHour = loc.hourlyTrends.reduce(
+                      (max, curr) => (curr.count > max.count ? curr : max),
+                      loc.hourlyTrends[0]
+                    );
+
+                    const grade =
+                      loc.status === 'Low'
+                        ? 'Grade A (Optimal)'
+                        : loc.status === 'Medium'
+                        ? 'Grade B (Moderate)'
+                        : 'Grade C (Congested)';
+
+                    const gradeStyle =
+                      loc.status === 'Low'
+                        ? 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border-emerald-500/30'
+                        : loc.status === 'Medium'
+                        ? 'bg-amber-500/10 text-amber-700 dark:text-amber-300 border-amber-500/30'
+                        : 'bg-rose-500/10 text-rose-700 dark:text-rose-300 border-rose-500/30';
+
+                    return (
+                      <tr key={loc.id} className="hover:bg-slate-100/50 dark:hover:bg-white/5 transition-colors">
+                        <td className="p-3 font-bold text-slate-900 dark:text-white">{loc.name}</td>
+                        <td className="p-3 text-slate-500 dark:text-slate-400">{loc.category}</td>
+                        <td className="p-3 font-mono text-slate-800 dark:text-slate-200">{loc.peopleCount * 4 + 80} / day</td>
+                        <td className="p-3 font-semibold text-teal-600 dark:text-teal-300">{peakHour ? peakHour.time : '12:00 PM'}</td>
+                        <td className="p-3 font-mono text-slate-800 dark:text-slate-200">{loc.estimatedWaitMin} min</td>
+                        <td className="p-3">
+                          <span className={`px-2 py-0.5 rounded text-[10px] font-bold border ${gradeStyle}`}>
+                            {grade}
+                          </span>
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>
