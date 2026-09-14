@@ -18,20 +18,21 @@ source venv/bin/activate
 pip install -r python/requirements.txt
 ```
 
-### 2. Run the Camera YOLO Detector
+### 2. Run the YOLOv8 ML Detection Server
 ```bash
-python3 python/camera_yolo_detector.py --camera 0 --location canteen
+python3 python/yolo_server.py --camera 0 --location canteen
 ```
 
 ## Options & Arguments
 
-- `--camera 0`: Camera index (default: `0` for default laptop webcam, `1` for external USB camera, or RTSP stream URL).
+- `--camera 0`: Camera index (`0` for default webcam, `1` for USB webcam, or RTSP stream URL).
 - `--location canteen`: Campus location ID to update (`canteen`, `admin-office`, `library`, `student-services`, `fee-counter`, `transport-office`).
 - `--api-url https://ai-queue-sense.vercel.app/api/locations`: Backend API endpoint to update live queue count.
-- `--threshold 0.45`: Detection confidence threshold.
+- `--port 5000`: Flask status API server port.
+- `--conf 0.40`: YOLOv8 detection confidence threshold.
 
 ## Features
 
-- **YOLOv8 & OpenCV Engine**: Uses YOLOv8 (or OpenCV HOG default fallback) to detect humans in video frames.
-- **Real-Time Bounding Boxes**: Draws cyan bounding boxes (`Person 95%`) and head markers over every human target.
-- **Live Supabase Sync**: Syncs detected crowd count to the AI QueueSense backend API every 3 seconds, updating Student Overview, Staff Dashboard, Congestion Status, and Wait Times live!
+- **YOLOv8 & OpenCV Engine**: Uses YOLOv8 (`yolov8n.pt`) to detect humans in video frames.
+- **Dynamic Real-Time Bounding Boxes**: Detects the exact number of people in frame (0, 1, 2, 3, etc.) and draws animated cyan bounding boxes (`Person 1 (96%)`).
+- **Live Supabase Sync**: Syncs detected crowd count to the AI QueueSense backend API every 2 seconds, updating Student Overview, Staff Dashboard, Congestion Status, and Wait Times live!
