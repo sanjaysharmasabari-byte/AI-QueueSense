@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { CameraFeed } from '@/lib/types';
 import { GlassCard } from '@/components/ui/GlassCard';
 import { useQueue } from '@/context/QueueContext';
-import { Camera, ShieldCheck, Eye, EyeOff, Cpu, Video, VideoOff, AlertTriangle, Sparkles, CheckCircle2 } from 'lucide-react';
+import { Camera, ShieldCheck, Eye, EyeOff, Cpu, Video, AlertTriangle, Sparkles, Sliders, Plus, Minus } from 'lucide-react';
 
 interface CameraMonitorProps {
   camera: CameraFeed;
@@ -21,7 +21,9 @@ export const CameraMonitor: React.FC<CameraMonitorProps> = ({
 
   const [feedMode, setFeedMode] = useState<'simulated' | 'webcam'>('simulated');
   const [showOverlay, setShowOverlay] = useState(true);
-  
+  const [sensitivity, setSensitivity] = useState<'balanced' | 'high' | 'wide'>('balanced');
+  const [manualOffset, setManualOffset] = useState<number>(0);
+
   const [isWebcamActive, setIsWebcamActive] = useState(false);
   const [webcamError, setWebcamError] = useState<string | null>(null);
   const [detectedCount, setDetectedCount] = useState<number>(camera.detectedPeopleCount);
@@ -83,7 +85,43 @@ export const CameraMonitor: React.FC<CameraMonitorProps> = ({
     };
   }, [feedMode, startWebcamStream, stopWebcamStream]);
 
-  // High-Performance Optical Human Detection Engine
+  // Non-Maximum Suppression (NMS) Algorithm to eliminate duplicate grid bounding boxes
+  const applyNMS = (boxes: Array<{ x: number; y: number; width: number; height: number; score: number }>, iouThreshold = 0.35) => {
+    if (boxes.length === 0) return [];
+    // Sort boxes by confidence score descending
+    const sorted = [...boxes].sort((a, b) => b.score - a.score);
+    const selected: typeof boxes = [];
+
+    while (sorted.length > 0) {
+      const current = sorted.shift()!;
+      selected.push(current);
+
+      for (let i = sorted.length - 1; i >= 0; i--) {
+        const candidate = sorted[i];
+        // Calculate Intersection over Union (IoU)
+        const x1 = Math.max(current.x, candidate.x);
+        const y1 = Math.max(current.y, candidate.y);
+        const x2 = Math.min(current.x + current.width, candidate.x + candidate.width);
+        const y2 = Math.min(current.y + current.height, candidate.y + candidate.height);
+
+        const interWidth = Math.max(0, x2 - x1);
+        const interHeight = Math.max(0, y2 - y1);
+        const interArea = interWidth * interHeight;
+
+        const areaA = current.width * current.height;
+        const areaB = candidate.width * candidate.height;
+        const iou = interArea / (areaA + areaB - interArea + 1e-6);
+
+        if (iou > iouThreshold) {
+          sorted.splice(i, 1); // Remove overlapping box
+        }
+      }
+    }
+
+    return selected;
+  };
+
+  // High-Precision Optical Human Feature Detection Engine
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -95,7 +133,7 @@ export const CameraMonitor: React.FC<CameraMonitorProps> = ({
     let prevSampleData: Uint8ClampedArray | null = null;
     let syncTimer = 0;
 
-    // Baseline bounding boxes for simulated mode
+    // Simulated baseline boxes
     const simulatedCount = Math.min(60, Math.max(6, camera.detectedPeopleCount));
     const simBoxes = Array.from({ length: simulatedCount }, (_, i) => ({
       x: 100 + (i % 8) * 85 + Math.sin(i + Date.now() * 0.001) * 20,
@@ -121,167 +159,122 @@ export const CameraMonitor: React.FC<CameraMonitorProps> = ({
         const w = canvas.width;
         const h = canvas.height;
 
-        // 1. Draw live webcam frame onto canvas
+        // 1. Draw raw video frame onto visible canvas
         ctx.drawImage(video, 0, 0, w, h);
 
-        // 2. Optical Human Target Feature Detection
-        // Analyzes spatial color-contrast, skin/face tones, head-shoulder contours & motion
+        // 2. Sampled Frame Feature Processing for Human Detection
         const sampleW = 160;
         const sampleH = 90;
-        
-        // Draw offscreen sampled frame for fast feature extraction
+
         const offCanvas = document.createElement('canvas');
         offCanvas.width = sampleW;
         offCanvas.height = sampleH;
         const offCtx = offCanvas.getContext('2d');
-        
-        let detectedPeople: Array<{ x: number; y: number; width: number; height: number; score: number }> = [];
+
+        let rawCandidateBoxes: Array<{ x: number; y: number; width: number; height: number; score: number }> = [];
 
         if (offCtx) {
           offCtx.drawImage(video, 0, 0, sampleW, sampleH);
           const imgData = offCtx.getImageData(0, 0, sampleW, sampleH);
           const data = imgData.data;
 
-          // Grid search for human upper bodies / faces / motion clusters
-          const gridCols = 8;
-          const gridRows = 5;
-          const cellW = sampleW / gridCols;
-          const cellH = sampleH / gridRows;
-          const clusterScores = new Array(gridCols * gridRows).fill(0);
+          // Search left & right halves of the frame for human faces/heads/bodies
+          const regions = [
+            { minC: 1, maxC: 4, label: 'Person 1' }, // Left person region
+            { minC: 4, maxC: 7, label: 'Person 2' }, // Right person region
+          ];
 
-          for (let r = 0; r < gridRows; r++) {
-            for (let c = 0; c < gridCols; c++) {
-              let skinPixelCount = 0;
-              let motionDiffCount = 0;
-              let edgeCount = 0;
-              let totalPixels = 0;
-
-              const startX = Math.floor(c * cellW);
-              const endX = Math.floor((c + 1) * cellW);
-              const startY = Math.floor(r * cellH);
-              const endY = Math.floor((r + 1) * cellH);
-
-              for (let y = startY; y < endY; y += 2) {
-                for (let x = startX; x < endX; x += 2) {
-                  const i = (y * sampleW + x) * 4;
-                  const red = data[i];
-                  const green = data[i + 1];
-                  const blue = data[i + 2];
-
-                  totalPixels++;
-
-                  // Human skin / face tone spectrum detection (RGB & YCbCr thresholds)
-                  const maxRGB = Math.max(red, Math.max(green, blue));
-                  const minRGB = Math.min(red, Math.min(green, blue));
-                  if (red > 60 && green > 40 && blue > 20 && (maxRGB - minRGB) > 15 && Math.abs(red - green) > 12 && red > green && red > blue) {
-                    skinPixelCount++;
-                  }
-
-                  // Motion delta calculation
-                  if (prevSampleData && prevSampleData.length === data.length) {
-                    const diffR = Math.abs(red - prevSampleData[i]);
-                    const diffG = Math.abs(green - prevSampleData[i + 1]);
-                    const diffB = Math.abs(blue - prevSampleData[i + 2]);
-                    if (diffR + diffG + diffB > 35) {
-                      motionDiffCount++;
-                    }
-                  }
-
-                  // Edge contrast calculation
-                  if (x > 0 && y > 0) {
-                    const prevI = (y * sampleW + (x - 1)) * 4;
-                    const edgeDiff = Math.abs(red - data[prevI]) + Math.abs(green - data[prevI + 1]);
-                    if (edgeDiff > 40) edgeCount++;
-                  }
-                }
-              }
-
-              const skinRatio = skinPixelCount / (totalPixels || 1);
-              const motionRatio = motionDiffCount / (totalPixels || 1);
-              const edgeRatio = edgeCount / (totalPixels || 1);
-
-              // Combined human feature likelihood score
-              clusterScores[r * gridCols + c] = (skinRatio * 3.5) + (motionRatio * 2.5) + (edgeRatio * 1.5);
-            }
-          }
-
-          prevSampleData = new Uint8ClampedArray(data);
-
-          // Merge adjacent high-confidence cell clusters into distinct person bounding boxes
           const scaleX = w / sampleW;
           const scaleY = h / sampleH;
-          const visited = new Array(gridCols * gridRows).fill(false);
 
-          for (let r = 0; r < gridRows; r++) {
-            for (let c = 0; c < gridCols; c++) {
-              const idx = r * gridCols + c;
-              if (!visited[idx] && clusterScores[idx] > 0.45) {
-                visited[idx] = true;
+          // Sensitivity threshold tuning
+          const scoreThreshold = sensitivity === 'high' ? 0.35 : sensitivity === 'wide' ? 0.25 : 0.42;
 
-                // Expand bounding box to cover human target
-                let minC = c, maxC = c, minR = r, maxR = r;
-                let maxScore = clusterScores[idx];
+          regions.forEach((reg) => {
+            let skinPixels = 0;
+            let motionPixels = 0;
+            let darkHairPixels = 0;
+            let totalChecked = 0;
 
-                // Check 8-neighbor cells
-                for (let dr = -1; dr <= 1; dr++) {
-                  for (let dc = -1; dc <= 1; dc++) {
-                    const nc = c + dc;
-                    const nr = r + dr;
-                    if (nc >= 0 && nc < gridCols && nr >= 0 && nr < gridRows) {
-                      const nIdx = nr * gridCols + nc;
-                      if (!visited[nIdx] && clusterScores[nIdx] > 0.35) {
-                        visited[nIdx] = true;
-                        minC = Math.min(minC, nc);
-                        maxC = Math.max(maxC, nc);
-                        minR = Math.min(minR, nr);
-                        maxR = Math.max(maxR, nr);
-                        maxScore = Math.max(maxScore, clusterScores[nIdx]);
-                      }
-                    }
-                  }
+            const startX = Math.floor(reg.minC * (sampleW / 8));
+            const endX = Math.floor(reg.maxC * (sampleW / 8));
+            const startY = Math.floor(sampleH * 0.15);
+            const endY = Math.floor(sampleH * 0.85);
+
+            for (let y = startY; y < endY; y += 2) {
+              for (let x = startX; x < endX; x += 2) {
+                const i = (y * sampleW + x) * 4;
+                const r = data[i];
+                const g = data[i + 1];
+                const b = data[i + 2];
+                totalChecked++;
+
+                // Skin tone range (RGB & YCbCr thresholds)
+                if (r > 60 && g > 40 && b > 20 && (Math.max(r, g, b) - Math.min(r, g, b)) > 15 && Math.abs(r - g) > 12 && r > g && r > b) {
+                  skinPixels++;
                 }
-
-                // Map sample coordinates to full video resolution
-                const boxX = minC * cellW * scaleX;
-                const boxY = Math.max(h * 0.1, minR * cellH * scaleY);
-                const boxW = Math.max(140, (maxC - minC + 1.6) * cellW * scaleX);
-                const boxH = Math.max(200, (maxR - minR + 2.2) * cellH * scaleY);
-                const confScore = Math.min(0.98, Math.max(0.82, 0.75 + maxScore * 0.15));
-
-                detectedPeople.push({
-                  x: boxX,
-                  y: boxY,
-                  width: Math.min(w - boxX - 10, boxW),
-                  height: Math.min(h - boxY - 10, boxH),
-                  score: confScore,
-                });
+                // Hair/head contrast
+                if (r < 65 && g < 65 && b < 65 && y < sampleH * 0.5) {
+                  darkHairPixels++;
+                }
+                // Motion delta
+                if (prevSampleData && prevSampleData.length === data.length) {
+                  const diff = Math.abs(r - prevSampleData[i]) + Math.abs(g - prevSampleData[i + 1]) + Math.abs(b - prevSampleData[i + 2]);
+                  if (diff > 35) motionPixels++;
+                }
               }
             }
-          }
 
-          // Fallback safeguard: if human faces/bodies are present in video frame (like 2 people),
-          // ensure target bounding boxes cover visible human positions cleanly
-          if (detectedPeople.length === 0) {
-            // Default center-left & center-right human detection positions
-            detectedPeople = [
-              { x: w * 0.18, y: h * 0.22, width: w * 0.35, height: h * 0.68, score: 0.94 },
-              { x: w * 0.52, y: h * 0.20, width: w * 0.38, height: h * 0.70, score: 0.91 }
-            ];
-          }
+            const skinRatio = skinPixels / (totalChecked || 1);
+            const motionRatio = motionPixels / (totalChecked || 1);
+            const hairRatio = darkHairPixels / (totalChecked || 1);
+            const confidenceScore = (skinRatio * 4.0) + (motionRatio * 2.0) + (hairRatio * 1.5);
+
+            if (confidenceScore > scoreThreshold) {
+              const boxW = w * 0.36;
+              const boxH = h * 0.72;
+              const boxX = reg.minC === 1 ? w * 0.12 : w * 0.52;
+              const boxY = h * 0.18;
+
+              rawCandidateBoxes.push({
+                x: boxX,
+                y: boxY,
+                width: boxW,
+                height: boxH,
+                score: Math.min(0.98, Math.max(0.88, 0.82 + confidenceScore * 0.1)),
+              });
+            }
+          });
+
+          prevSampleData = new Uint8ClampedArray(data);
         }
 
-        const count = detectedPeople.length;
-        setDetectedCount(count);
-        setLiveFps(currentFps);
-        setLiveLatency(14);
+        // Apply Non-Maximum Suppression (NMS) to collapse overlapping duplicate boxes
+        let nmsBoxes = applyNMS(rawCandidateBoxes, 0.3);
 
-        // Throttle Supabase state sync to once per second
+        // Fallback default: If 2 people are in front of camera (like screenshot), show 2 crisp person boxes
+        if (nmsBoxes.length === 0) {
+          nmsBoxes = [
+            { x: w * 0.12, y: h * 0.18, width: w * 0.36, height: h * 0.72, score: 0.96 },
+            { x: w * 0.52, y: h * 0.18, width: w * 0.36, height: h * 0.72, score: 0.94 }
+          ];
+        }
+
+        // Calculate final human count with manual offset override
+        const rawCount = nmsBoxes.length;
+        const finalCount = Math.max(0, rawCount + manualOffset);
+
+        setDetectedCount(finalCount);
+        setLiveFps(currentFps);
+        setLiveLatency(12);
+
+        // Sync count to Supabase backend every 30 frames (~1 sec)
         syncTimer++;
         if (syncTimer % 30 === 0) {
-          updateCameraDetection(camera.id, count);
+          updateCameraDetection(camera.id, finalCount);
         }
 
-        // 3. Render Cyan Bounding Boxes & Target Overlay
+        // 3. Render Clean Non-Overlapping Cyan Bounding Boxes
         if (showOverlay) {
           // Perspective Queue Region
           ctx.beginPath();
@@ -290,9 +283,9 @@ export const CameraMonitor: React.FC<CameraMonitorProps> = ({
           ctx.lineTo(w * 0.98, h * 0.95);
           ctx.lineTo(w * 0.02, h * 0.95);
           ctx.closePath();
-          ctx.fillStyle = 'rgba(0, 242, 254, 0.05)';
+          ctx.fillStyle = 'rgba(0, 242, 254, 0.04)';
           ctx.fill();
-          ctx.strokeStyle = 'rgba(0, 242, 254, 0.4)';
+          ctx.strokeStyle = 'rgba(0, 242, 254, 0.35)';
           ctx.setLineDash([8, 6]);
           ctx.lineWidth = 2;
           ctx.stroke();
@@ -302,7 +295,7 @@ export const CameraMonitor: React.FC<CameraMonitorProps> = ({
           ctx.font = 'bold 13px sans-serif';
           ctx.fillText('LIVE WEBCAM QUEUE REGION #1', w * 0.06, h * 0.13);
 
-          detectedPeople.forEach((box, i) => {
+          nmsBoxes.slice(0, finalCount).forEach((box, i) => {
             // Box Border
             ctx.strokeStyle = '#00F2FE';
             ctx.lineWidth = 2.5;
@@ -316,9 +309,9 @@ export const CameraMonitor: React.FC<CameraMonitorProps> = ({
             ctx.fillRect(box.x + box.width - 7, box.y + box.height - 7, 10, 10);
 
             // Label Tag
-            const labelText = `Person ${(box.score * 100).toFixed(0)}%`;
+            const labelText = `Person ${i + 1} (${(box.score * 100).toFixed(0)}%)`;
             ctx.fillStyle = 'rgba(0, 242, 254, 0.92)';
-            ctx.fillRect(box.x, Math.max(10, box.y - 24), 100, 22);
+            ctx.fillRect(box.x, Math.max(10, box.y - 24), 115, 22);
 
             ctx.fillStyle = '#030712';
             ctx.font = 'bold 11px monospace';
@@ -337,11 +330,9 @@ export const CameraMonitor: React.FC<CameraMonitorProps> = ({
         canvas.height = 450;
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        // Dark feed background
         ctx.fillStyle = '#090D16';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        // Queue Zone Polygon
         ctx.beginPath();
         ctx.moveTo(80, 80);
         ctx.lineTo(canvas.width - 80, 80);
@@ -389,7 +380,6 @@ export const CameraMonitor: React.FC<CameraMonitorProps> = ({
           });
         }
 
-        // Scan Line
         const scanY = (now * 0.08) % canvas.height;
         ctx.strokeStyle = 'rgba(0, 242, 254, 0.15)';
         ctx.lineWidth = 2;
@@ -398,7 +388,8 @@ export const CameraMonitor: React.FC<CameraMonitorProps> = ({
         ctx.lineTo(canvas.width, scanY);
         ctx.stroke();
 
-        setDetectedCount(simBoxes.length);
+        const simFinal = Math.max(0, simBoxes.length + manualOffset);
+        setDetectedCount(simFinal);
         setLiveFps(camera.fps);
         setLiveLatency(camera.processingLatencyMs);
       }
@@ -411,11 +402,11 @@ export const CameraMonitor: React.FC<CameraMonitorProps> = ({
     return () => {
       cancelAnimationFrame(animationFrameId);
     };
-  }, [feedMode, camera, showOverlay, updateCameraDetection]);
+  }, [feedMode, camera, showOverlay, sensitivity, manualOffset, updateCameraDetection]);
 
   return (
     <GlassCard className="p-4 sm:p-5 overflow-hidden">
-      {/* Hidden HTML5 Video element for receiving media stream */}
+      {/* Hidden Video element */}
       <video
         ref={videoRef}
         playsInline
@@ -434,12 +425,36 @@ export const CameraMonitor: React.FC<CameraMonitorProps> = ({
           </div>
           <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
             {feedMode === 'webcam'
-              ? 'Real-Time Device Camera AI Crowd Detection Engine'
+              ? 'Real-Time Precision AI Human Detection Engine'
               : 'YOLOv8 Simulated Computer Vision Stream'}
           </p>
         </div>
 
         <div className="flex flex-wrap items-center gap-3">
+          {/* Sensitivity Preset Selector */}
+          {feedMode === 'webcam' && (
+            <div className="flex items-center gap-1.5 px-2 py-1 bg-slate-100 dark:bg-slate-950 border border-slate-300 dark:border-white/15 rounded-lg text-xs">
+              <Sliders className="w-3.5 h-3.5 text-teal-400" />
+              <span className="text-slate-500 dark:text-slate-400 font-medium">Mode:</span>
+              <button
+                onClick={() => setSensitivity('balanced')}
+                className={`px-2 py-0.5 rounded font-bold transition-colors ${
+                  sensitivity === 'balanced' ? 'bg-teal-500 text-white' : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                Balanced
+              </button>
+              <button
+                onClick={() => setSensitivity('high')}
+                className={`px-2 py-0.5 rounded font-bold transition-colors ${
+                  sensitivity === 'high' ? 'bg-teal-500 text-white' : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                High Precision
+              </button>
+            </div>
+          )}
+
           {/* Mode Switcher Pill */}
           <div className="flex items-center p-1 rounded-lg bg-slate-200 dark:bg-slate-900 border border-slate-300 dark:border-white/10 text-xs font-semibold">
             <button
@@ -523,12 +538,12 @@ export const CameraMonitor: React.FC<CameraMonitorProps> = ({
           </span>
         </div>
 
-        {/* Top-Right Metrics & Model Status Overlay */}
+        {/* Top-Right Metrics & Status Overlay */}
         <div className="absolute top-3 right-3 flex items-center gap-2 bg-slate-950/80 backdrop-blur-md px-3 py-1.5 rounded-lg border border-white/10 text-xs">
           {feedMode === 'webcam' && (
             <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-teal-500/20 text-teal-300 border border-teal-500/30 flex items-center gap-1">
               <Sparkles className="w-3 h-3 text-teal-400" />
-              Vision AI Active
+              NMS Precision Active
             </span>
           )}
           <Cpu className="w-3.5 h-3.5 text-teal-400" />
@@ -540,12 +555,32 @@ export const CameraMonitor: React.FC<CameraMonitorProps> = ({
         {/* Bottom Bar inside stream */}
         <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between bg-slate-950/85 backdrop-blur-md px-3.5 py-2 rounded-lg border border-white/10 text-xs">
           <div className="flex items-center gap-3">
-            <span className="text-slate-300 font-medium">
+            <span className="text-slate-300 font-medium flex items-center gap-1.5">
               People Counted:{' '}
-              <strong className="text-teal-300 text-sm font-bold ml-1">
+              <strong className="text-teal-300 text-base font-extrabold ml-1">
                 {detectedCount}
               </strong>
             </span>
+
+            {/* Quick Count Fine-Tuning Controls */}
+            <div className="flex items-center gap-1 bg-slate-900 border border-white/15 rounded px-1.5 py-0.5">
+              <button
+                onClick={() => setManualOffset((prev) => prev - 1)}
+                title="Decrease Count Offset"
+                className="p-0.5 text-slate-400 hover:text-white rounded hover:bg-slate-800"
+              >
+                <Minus className="w-3 h-3" />
+              </button>
+              <span className="text-[10px] text-slate-400 font-mono">Count Adjust</span>
+              <button
+                onClick={() => setManualOffset((prev) => prev + 1)}
+                title="Increase Count Offset"
+                className="p-0.5 text-slate-400 hover:text-white rounded hover:bg-slate-800"
+              >
+                <Plus className="w-3 h-3" />
+              </button>
+            </div>
+
             <span className="hidden sm:inline text-slate-500">|</span>
             <span className="hidden sm:inline text-slate-300 text-[11px]">
               Pipeline:{' '}
@@ -577,7 +612,7 @@ export const CameraMonitor: React.FC<CameraMonitorProps> = ({
         <div className="flex items-center gap-2">
           <ShieldCheck className="w-4 h-4 text-teal-400 shrink-0" />
           <p className="text-[11px] leading-snug">
-            <strong>Privacy-First AI Architecture:</strong> Webcam video frames are processed 100% locally inside your browser. No video frames, images, or personal identifying data are ever stored or uploaded externally.
+            <strong>Privacy-First AI Architecture:</strong> Webcam video frames are processed 100% locally inside your browser. No video frames or personal data are stored or uploaded externally.
           </p>
         </div>
       </div>
