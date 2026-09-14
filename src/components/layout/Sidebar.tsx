@@ -18,7 +18,6 @@ import {
   Layers,
   ChevronLeft,
   ChevronRight,
-  LogOut,
 } from 'lucide-react';
 import { clsx } from 'clsx';
 
@@ -178,31 +177,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
         })}
       </div>
 
-      {/* Footer Role & Theme Widget */}
+      {/* Footer Quick Controls Widget */}
       {!collapsed && (
-        <div className="p-3 border-t border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-slate-900/50 m-2 rounded-xl space-y-2">
+        <div className="p-3 border-t border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-slate-900/50 m-2 rounded-xl">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="w-7 h-7 rounded-full bg-slate-200 dark:bg-slate-800 border border-teal-500/40 flex items-center justify-center text-xs font-bold text-teal-600 dark:text-teal-300">
-                {role === 'staff' ? 'ST' : 'SD'}
-              </div>
-              <div className="truncate">
-                <p className="text-xs font-medium text-slate-800 dark:text-slate-200">
-                  {role === 'staff' ? 'Demo Staff' : 'Demo Student'}
-                </p>
-                <p className="text-[10px] text-slate-500 dark:text-slate-400">Campus Active</p>
-              </div>
-            </div>
-            <Link
-              href="/login"
-              className="text-slate-400 hover:text-rose-500 p-1"
-              title="Sign Out / Change User"
-            >
-              <LogOut className="w-3.5 h-3.5" />
-            </Link>
-          </div>
-          <div className="pt-2 border-t border-slate-200 dark:border-white/5 flex items-center justify-between">
-            <span className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Theme:</span>
+            <span className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Appearance:</span>
             <ThemeToggle showLabel />
           </div>
         </div>
