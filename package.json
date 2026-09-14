@@ -11,6 +11,8 @@
   "dependencies": {
     "@hookform/resolvers": "^4.1.0",
     "@supabase/supabase-js": "^2.116.0",
+    "@tensorflow-models/coco-ssd": "^2.2.3",
+    "@tensorflow/tfjs": "^4.22.0",
     "canvas-confetti": "^1.9.4",
     "clsx": "^2.1.1",
     "framer-motion": "^12.4.2",

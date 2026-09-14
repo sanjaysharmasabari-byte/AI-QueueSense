@@ -39,6 +39,7 @@ interface QueueContextType {
   setTheme: (theme: ThemeMode) => void;
   toggleTheme: () => void;
   updateLocationCount: (id: string, newCount: number) => Promise<void>;
+  updateCameraDetection: (cameraId: string, count: number) => void;
   updateThresholds: (newThresholds: Partial<ThresholdSettings>) => Promise<void>;
   markAlertRead: (id: string) => Promise<void>;
   dismissAlert: (id: string) => Promise<void>;
@@ -175,6 +176,42 @@ export const QueueProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       console.error('Failed to sync location update to Supabase:', err);
     }
   };
+
+  const updateCameraDetection = useCallback((cameraId: string, count: number) => {
+    const safeCount = Math.max(0, count);
+
+    setCameras((prevCams) =>
+      prevCams.map((c) =>
+        c.id === cameraId
+          ? { ...c, detectedPeopleCount: safeCount, status: 'LIVE' }
+          : c
+      )
+    );
+
+    setLocations((prevLocs) => {
+      const targetCam = cameras.find((c) => c.id === cameraId);
+      if (!targetCam) return prevLocs;
+      const targetLocId = targetCam.locationId;
+
+      return prevLocs.map((loc) => {
+        if (loc.id === targetLocId) {
+          const newStatus = calculateCongestionLevel(safeCount, thresholds);
+          const newDensity = calculateQueueDensity(safeCount, loc.maxCapacity);
+          const newWait = estimateWaitTime(safeCount, loc.avgServiceTimeSec);
+
+          return {
+            ...loc,
+            peopleCount: safeCount,
+            status: newStatus,
+            queueDensityPercent: newDensity,
+            estimatedWaitMin: newWait,
+            lastUpdated: 'Live Webcam',
+          };
+        }
+        return loc;
+      });
+    });
+  }, [cameras, thresholds]);
 
   const updateThresholds = async (newThresholds: Partial<ThresholdSettings>) => {
     const merged = { ...thresholds, ...newThresholds };
@@ -346,6 +383,7 @@ export const QueueProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         setTheme,
         toggleTheme,
         updateLocationCount,
+        updateCameraDetection,
         updateThresholds,
         markAlertRead,
         dismissAlert,
